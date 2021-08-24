@@ -1,0 +1,13 @@
+Classes
+    Customers
+        A: first_name, last_name, address
+    Accounts
+        A: account_type, balance
+        M: deposit, withdrawal
+    Employees
+        A: first_name, last_name, title
+    Services
+        SC: Loan
+        SC: CreditCard
+
+    Getter/Setter methods for each
