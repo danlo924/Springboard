@@ -1,13 +1,34 @@
 Classes
-    Customers
-        A: first_name, last_name, address
+    Customers:
+        A: first_name, last_name, address, phone_num
+        A: acct_nums[]
+        M: create_new
+            A:open_date
+            A:balance
+        M: close_acct
+
     Accounts
-        A: account_type, balance
-        M: deposit, withdrawal
+        A: acct_num, account_type, balance
+            Checking Account - inherits from accounts
+            Savings Account - inherits from accounts
+            Loan Account
+            M: deposit, withdrawal
+
     Employees
-        A: first_name, last_name, title
-    Services
-        SC: Loan
-        SC: CreditCard
+        A: first_name, last_name, title, employee_id
+            Teller - inherits
+                M: Deposti, withdrawal, balance
+            Service Staff - inherits
+                M: Open Account, close account, CreditCard, ProcessLoan
+            Branch Manager - inherits
+                M: Close Bank
+
+Methods:
+    Deposit, Withdraw, Get balance
+    Open acct, close acct
+    Get loan, get credit CreditCard
+    Close Bank
 
     Getter/Setter methods for each
+
+Console: Represents Customer / Bank interaction from beginning to end
