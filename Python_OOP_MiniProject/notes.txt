@@ -12,7 +12,7 @@ Classes
             Checking Account - inherits from accounts
             Savings Account - inherits from accounts
             Loan Account
-            M: deposit, withdrawal
+            M: deposit, withdrawal, balance
 
     Employees
         A: first_name, last_name, title, employee_id
