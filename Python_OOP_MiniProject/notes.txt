@@ -17,18 +17,14 @@ Classes
     Employees
         A: first_name, last_name, title, employee_id
             Teller - inherits
-                M: Deposti, withdrawal, balance
-            Service Staff - inherits
-                M: Open Account, close account, CreditCard, ProcessLoan
+                M: deposit, withdrawal, balance
             Branch Manager - inherits
-                M: Close Bank
+                M: open account, close account, credit card, process loan
 
 Methods:
     Deposit, Withdraw, Get balance
     Open acct, close acct
     Get loan, get credit CreditCard
-    Close Bank
-
     Getter/Setter methods for each
 
 Console: Represents Customer / Bank interaction from beginning to end
