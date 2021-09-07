@@ -4,12 +4,12 @@ Users should be able to execute the **console.py** file and simulate a customer 
 The customer session should be able to handle **new** and **existing** customers, and perform 0 to ∞ transactions until the customer is done.
 
 Various transactions that the Customer can initiate include the following:   
-	- deposits  
-    - withdrawals    
-    - loan payments   
-    - opening a new account   
-    - closing an account  
-    - opening a new loan for a specific amount and length of time  
+	* deposits  
+    	* withdrawals    
+	* loan payments   
+	* opening a new account   
+	* closing an account  
+	* opening a new loan for a specific amount and length of time  
 
 Account balances should be handled and saved after each transaction.
 
