@@ -13,7 +13,8 @@ investing_db_engine = create_engine(
             host='127.0.0.1'
             ,db='investing'
             ,user='root'
-            ,pw='<pw_here>'
+            ,pw='Nuggy557$'
+            # ,pw='<pw_here>'
         )
     )
 
