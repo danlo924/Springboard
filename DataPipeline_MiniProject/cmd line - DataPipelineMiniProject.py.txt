@@ -1,0 +1,17 @@
+
+(base) C:\Users\danie>cd C:\GitRepos\Springboard\DataPipeline_MiniProject
+
+(base) C:\GitRepos\Springboard\DataPipeline_MiniProject>DataPipelineMiniProject.py
+Loading 3rd party data file (C:/GitRepos/Springboard/DataPipeline_MiniProject/third_party_sales_1.csv) into test_db database.
+Inserting row #1 into the Sales table
+Inserting row #2 into the Sales table
+Inserting row #3 into the Sales table
+Inserting row #4 into the Sales table
+Inserting row #5 into the Sales table
+Inserting row #6 into the Sales table
+Here are the most popular tickets in the past month:
+ - The North American International Auto Show
+ - Christmas Spectacular
+ - Carlisle Ford Nationals
+
+(base) C:\GitRepos\Springboard\DataPipeline_MiniProject>

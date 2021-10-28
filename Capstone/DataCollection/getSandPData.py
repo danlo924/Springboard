@@ -7,6 +7,13 @@ import yfinance as yf
 if (not os.environ.get('PYTHONHTTPSVERIFY', '') and getattr(ssl, '_create_unverified_context', None)):
     ssl._create_default_https_context = ssl._create_unverified_context
 
+# url = 'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies'
+# context = ssl._create_unverified_context()
+# response = request.urlopen(url, context=context)
+# html = response.read()
+
+# SandP500List=pd.read_html(html)    
+
 # CREATE ENGINE FOR MYSQL INVESTING DATABASE
 investing_db_engine = create_engine(
         "mysql+pymysql://{user}:{pw}@{host}/{db}".format(
@@ -14,7 +21,6 @@ investing_db_engine = create_engine(
             ,db='investing'
             ,user='root'
             ,pw='<pw_here>'
-            # ,pw='<pw_here>'
         )
     )
 
