@@ -1,18 +1,9 @@
 import os, ssl
+import urllib.request as req
 import pandas as pd
 from sqlalchemy import create_engine
 import yfinance as yf
-
-# BYPASS CERTIFICATE FOR NOW
-if (not os.environ.get('PYTHONHTTPSVERIFY', '') and getattr(ssl, '_create_unverified_context', None)):
-    ssl._create_default_https_context = ssl._create_unverified_context
-
-# url = 'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies'
-# context = ssl._create_unverified_context()
-# response = request.urlopen(url, context=context)
-# html = response.read()
-
-# SandP500List=pd.read_html(html)    
+import yahoofinancials as yafin
 
 # CREATE ENGINE FOR MYSQL INVESTING DATABASE
 investing_db_engine = create_engine(
@@ -28,7 +19,12 @@ investing_db_engine = create_engine(
 investing_db_conn = investing_db_engine.raw_connection()
 
 # GET FULL ACTIVE LIST OF S&P 500 COMPANIES, ALONG WITH COMPANIES ADDED / REMOVED IN THE PAST 20 YEARS
-SandP500List=pd.read_html('https://en.wikipedia.org/wiki/List_of_S%26P_500_companies')
+url = 'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies'
+context = ssl._create_unverified_context()
+response = req.urlopen(url, context=context)
+html = response.read()
+
+SandP500List=pd.read_html(html)    
 sp_curr = SandP500List[0]
 sp_hist = SandP500List[1]
 
@@ -46,8 +42,8 @@ try:
 except Exception as error:
     print(error)
 
-# ITERATE THROUGH STOCKS AND GET PRICE HISTORY
-sql = '''SELECT c.Ticker
+# FIND ALL STOCKS THAT NEED DATA REFRESHED
+sql = '''SELECT REPLACE(c.Ticker,'.','-')
     FROM companies c
     WHERE NOT EXISTS 
     (
@@ -55,25 +51,27 @@ sql = '''SELECT c.Ticker
         FROM companies c2
             INNER JOIN prices p ON c2.CompanyID = p.CompanyID
         WHERE c2.CompanyID = c.CompanyID
+            AND p.Date > date_sub(now(), interval 7 day)
         LIMIT 1
     )
     ORDER BY Ticker
-    LIMIT 10;
+    LIMIT 1000;
     '''
 
+# ITERATE THROUGH STOCKS AND GET PRICE HISTORY
 try:
     cursor = investing_db_conn.cursor()
     cursor.execute(sql)
     df_results = pd.DataFrame(cursor.fetchall(), columns=['Ticker'])
     cursor.close()
     investing_db_conn.commit()     
-    for index, row in df_results.iterrows():
+    for _, row in df_results.iterrows():
         ticker = str(row['Ticker'])
         print('Get the price history for: ' + ticker)
-        price_hist = yf.Ticker(ticker)
-        price_hist_df = price_hist.history(period='max')
-        price_hist_df.to_sql(con=investing_db_engine, name='_stg_price_hist', if_exists='replace')
         try:
+            price_hist = yf.Ticker(ticker)
+            price_hist_df = price_hist.history(period="45y") # get at most 45 years of price history, which should cover 1980 to 2021
+            price_hist_df.to_sql(con=investing_db_engine, name='_stg_price_hist', if_exists='replace')            
             cursor_pr = investing_db_conn.cursor()
             cursor_pr.callproc('sp_refresh_prices', args=[ticker,])
             results = list(cursor_pr.fetchall())
@@ -83,5 +81,6 @@ try:
             print(error)
 except Exception as error:
     print(error)
+finally:
+    investing_db_conn.close()
 
-investing_db_conn.close()

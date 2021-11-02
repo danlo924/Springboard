@@ -21,15 +21,13 @@ USE `investing` ;
 -- Table `investing`.`_stg_price_hist`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `investing`.`_stg_price_hist` (
-  `Date` DATETIME NULL DEFAULT NULL,
+  `Date` TEXT NULL DEFAULT NULL,
   `Open` DOUBLE NULL DEFAULT NULL,
   `High` DOUBLE NULL DEFAULT NULL,
   `Low` DOUBLE NULL DEFAULT NULL,
   `Close` DOUBLE NULL DEFAULT NULL,
-  `Volume` BIGINT NULL DEFAULT NULL,
-  `Dividends` DOUBLE NULL DEFAULT NULL,
-  `Stock Splits` DOUBLE NULL DEFAULT NULL,
-  INDEX `ix__stg_price_hist_Date` (`Date` ASC) VISIBLE)
+  `Adj Close` DOUBLE NULL DEFAULT NULL,
+  `Volume` DOUBLE NULL DEFAULT NULL)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -73,6 +71,17 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
+-- Table `investing`.`_stg_stock_earnings`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `investing`.`_stg_stock_earnings` (
+  `index` TEXT NULL DEFAULT NULL,
+  `AAPL` TEXT NULL DEFAULT NULL)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
 -- Table `investing`.`companies`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `investing`.`companies` (
@@ -89,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `investing`.`companies` (
   `UpdatedDate` DATETIME NULL DEFAULT NULL,
   PRIMARY KEY (`CompanyID`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 506
+AUTO_INCREMENT = 1031
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -148,6 +157,15 @@ BEGIN
         ,c.IsIndex = 0
         ,c.UpdatedDate = sysdate(3);
         
+	INSERT INTO companies(Name, Ticker, UpdatedDate)
+	SELECT h.`('Removed', 'Security')` AS Name
+		,h.`('Removed', 'Ticker')` AS Ticker
+        ,sysdate(3) AS UpdatedDate
+	FROM _stg_sp_history h
+	LEFT JOIN companies c ON h.`('Removed', 'Ticker')` = c.Ticker
+	WHERE h.`('Removed', 'Security')` IS NOT NULL
+		AND c.Ticker IS NULL;
+        
 END$$
 
 DELIMITER ;
@@ -192,6 +210,8 @@ BEGIN
 			AND p.Date = ph.Date
 	WHERE 
 		c.CompanyID = CompanyID_filter
+        AND ph.Date < CURRENT_DATE()
+        AND ph.Date >= '1980-01-01 00:00:00'
         AND p.Date IS NULL;
         
     UPDATE prices p
