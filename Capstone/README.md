@@ -1,17 +1,18 @@
 # Open-Ended Capstone Project: Data-Driven Investing
 
 ## Overview:
-#### The purpose of this project is to craft a data solution whereby investors can test the returns on a theoretical portfolio of stocks over a given timeframe using actual historical stock price data. 
-#### The data solution will consist of financial data typically used for fundamental analysis (valuations and financial reports), historical end-of-day prices, and monthly macroeconomic data. 
+#### The purpose of this project is to craft a data solution whereby investors can test the returns on a theoretical portfolio of stocks over a given timeframe using actual historical stock price and dividend data. 
+#### The data solution will consist of financial data including historical prices, dividends, and monthly macroeconomic data. 
 #### An analyst will then be able to “back-test” a particular investing strategy given certain inputs, thresholds, and assumptions. 
 #### The solution will serve as a tool for determining where and when to invest. 
 
 ### **DataCollection** - Python Scripts:
-#### **getSandPData.py** - python script that downloads a list of S&P Companies (current and historical) and populates Companies table with Company metadata, and Prices table with stock prices by Date
+#### **pipeline.py** - python script that refreshes a list of S&P Companies in the Companies table, and updates the Prices and Dividends tables for each stock Ticker
 
 ### **InvestingDB** - MySQL Database Tables:
 #### **Companies** (Stock Tickers) and Major Indexes with metadata
-#### **Prices** (End of Day) for each Company / Index
+#### **Prices** (Daily: Open, High, Low, Close, Volume) for each Company or Index
+#### **Dividends** (Frequency, Dates, Amount, SplitAdjFactor) for each Company or Index
 
 
 

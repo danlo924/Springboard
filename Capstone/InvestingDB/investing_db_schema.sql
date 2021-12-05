@@ -18,16 +18,41 @@ CREATE SCHEMA IF NOT EXISTS `investing` DEFAULT CHARACTER SET utf8mb4 COLLATE ut
 USE `investing` ;
 
 -- -----------------------------------------------------
+-- Table `investing`.`_stg_div_hist`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `investing`.`_stg_div_hist` (
+  `index` BIGINT NULL DEFAULT NULL,
+  `id` TEXT NULL DEFAULT NULL,
+  `type` TEXT NULL DEFAULT NULL,
+  `attributes.year` BIGINT NULL DEFAULT NULL,
+  `attributes.amount` TEXT NULL DEFAULT NULL,
+  `attributes.ex_date` TEXT NULL DEFAULT NULL,
+  `attributes.freq` TEXT NULL DEFAULT NULL,
+  `attributes.declare_date` TEXT NULL DEFAULT NULL,
+  `attributes.pay_date` TEXT NULL DEFAULT NULL,
+  `attributes.record_date` TEXT NULL DEFAULT NULL,
+  `attributes.date` TEXT NULL DEFAULT NULL,
+  `attributes.adjusted_amount` DOUBLE NULL DEFAULT NULL,
+  `attributes.split_adj_factor` DOUBLE NULL DEFAULT NULL,
+  INDEX `ix__stg_div_hist_index` (`index` ASC) VISIBLE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
 -- Table `investing`.`_stg_price_hist`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `investing`.`_stg_price_hist` (
-  `Date` TEXT NULL DEFAULT NULL,
+  `Date` DATETIME NULL DEFAULT NULL,
   `Open` DOUBLE NULL DEFAULT NULL,
   `High` DOUBLE NULL DEFAULT NULL,
   `Low` DOUBLE NULL DEFAULT NULL,
   `Close` DOUBLE NULL DEFAULT NULL,
-  `Adj Close` DOUBLE NULL DEFAULT NULL,
-  `Volume` DOUBLE NULL DEFAULT NULL)
+  `Volume` BIGINT NULL DEFAULT NULL,
+  `Dividends` DOUBLE NULL DEFAULT NULL,
+  `Stock Splits` DOUBLE NULL DEFAULT NULL,
+  INDEX `ix__stg_price_hist_Date` (`Date` ASC) VISIBLE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -71,17 +96,6 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
--- Table `investing`.`_stg_stock_earnings`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `investing`.`_stg_stock_earnings` (
-  `index` TEXT NULL DEFAULT NULL,
-  `AAPL` TEXT NULL DEFAULT NULL)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
-
--- -----------------------------------------------------
 -- Table `investing`.`companies`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `investing`.`companies` (
@@ -95,10 +109,34 @@ CREATE TABLE IF NOT EXISTS `investing`.`companies` (
   `SPAddDate` DATETIME NULL DEFAULT NULL,
   `SPRemDate` DATETIME NULL DEFAULT NULL,
   `IsIndex` BIT(1) NOT NULL DEFAULT b'0',
+  `HasDividend` BIT(1) NULL DEFAULT NULL,
   `UpdatedDate` DATETIME NULL DEFAULT NULL,
   PRIMARY KEY (`CompanyID`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 1031
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `investing`.`dividends`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `investing`.`dividends` (
+  `CompanyID` INT NOT NULL,
+  `FreqType` CHAR(15) NOT NULL,
+  `DeclareDate` DATETIME NULL DEFAULT NULL,
+  `ExDivDate` DATETIME NOT NULL,
+  `RecordDate` DATETIME NULL DEFAULT NULL,
+  `PayDate` DATETIME NULL DEFAULT NULL,
+  `Amount` FLOAT NULL DEFAULT NULL,
+  `AdjAmount` FLOAT NULL DEFAULT NULL,
+  `SplitAdjFactor` FLOAT NULL DEFAULT NULL,
+  `UpdatedDate` DATETIME NULL DEFAULT NULL,
+  PRIMARY KEY (`CompanyID`, `ExDivDate`, `FreqType`),
+  CONSTRAINT `dividends_ibfk_1`
+    FOREIGN KEY (`CompanyID`)
+    REFERENCES `investing`.`companies` (`CompanyID`))
+ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -171,18 +209,90 @@ END$$
 DELIMITER ;
 
 -- -----------------------------------------------------
--- procedure sp_refresh_prices
+-- procedure sp_refresh_dividends
 -- -----------------------------------------------------
 
 DELIMITER $$
 USE `investing`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_refresh_prices`(
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_refresh_dividends`(
 	IN StockTicker CHAR(15)
     )
 BEGIN
 	
     DECLARE CompanyID_filter INT;
     SET CompanyID_filter = (SELECT CompanyID FROM Companies WHERE Ticker = StockTicker);
+
+	INSERT INTO dividends
+    (
+		CompanyID
+        ,FreqType
+        ,DeclareDate
+        ,ExDivDate
+        ,RecordDate
+        ,PayDate
+        ,Amount
+        ,AdjAmount
+        ,SplitAdjFactor
+        ,UpdatedDate
+	)
+    SELECT 
+		c.CompanyID
+        ,dh.`attributes.freq`
+        ,dh.`attributes.declare_date`
+        ,dh.`attributes.ex_date`
+        ,dh.`attributes.record_date`
+        ,dh.`attributes.pay_date`
+        ,dh.`attributes.amount`
+        ,dh.`attributes.adjusted_amount`
+        ,dh.`attributes.split_adj_factor`
+        ,sysdate(3)
+	FROM _stg_div_hist dh
+		INNER JOIN companies c ON 1=1
+		LEFT OUTER JOIN dividends d ON c.CompanyID = d.CompanyID
+			AND d.ExDivDate = dh.`attributes.ex_date`
+            AND d.FreqType = dh.`attributes.freq`
+	WHERE 
+		c.CompanyID = CompanyID_filter
+		AND dh.`attributes.ex_date` IS NOT NULL
+        AND d.ExDivDate IS NULL;
+        
+    UPDATE dividends d
+    INNER JOIN _stg_div_hist dh ON d.ExDivDate = dh.`attributes.ex_date`
+		AND d.FreqType = dh.`attributes.freq`
+		AND d.CompanyID = CompanyID_filter
+    SET d.DeclareDate = dh.`attributes.declare_date`
+        ,d.RecordDate = dh.`attributes.record_date`
+        ,d.PayDate = dh.`attributes.pay_date`
+        ,d.Amount = dh.`attributes.amount`
+        ,d.AdjAmount = dh.`attributes.adjusted_amount`
+        ,d.SplitAdjFactor = dh.`attributes.split_adj_factor`
+        ,d.UpdatedDate = sysdate(3)
+	WHERE d.CompanyID = CompanyID_filter;
+    
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure sp_refresh_prices_company_data
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `investing`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_refresh_prices_company_data`(
+	IN StockTicker CHAR(15)
+    )
+BEGIN
+	
+    DECLARE CompanyID_filter INT;
+    SET CompanyID_filter = (SELECT CompanyID FROM Companies WHERE Ticker = StockTicker);
+    
+    IF (SELECT COUNT(*) FROM _stg_has_div) > 0 THEN 
+		UPDATE companies
+        SET HasDividend = 1
+			,UpdatedDate = sysdate(3)
+        WHERE CompanyID = CompanyID_filter;
+	END IF;
 
 	INSERT INTO Prices
     (
@@ -224,6 +334,8 @@ BEGIN
         ,p.Volume = ph.Volume
         ,p.UpdatedDate = sysdate(3)
 	WHERE p.CompanyID = CompanyID_filter;
+    
+    TRUNCATE TABLE _stg_has_div; 
     
 END$$
 

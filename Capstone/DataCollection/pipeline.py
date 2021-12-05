@@ -18,17 +18,20 @@ logging.basicConfig(
 )
 
 def log_message(msg, show=False):
+    '''logs msg parameter to file; optionally, show/print messages to terminal'''
     logging.debug(msg)
     if show==True:
         print(msg)
 
 def log_df_details(df_name, df):
+    '''logs the DataFrame details: Name of DataFrame, number of rows, number of columns'''
     try:
         log_message(df_name + ' DataFrame Loaded: ' + str(df.shape[0]) + ' Rows, ' + str(df.shape[1]) + ' Columns.')
     except Exception as error:
         log_message(error, show=True)    
 
 def get_price_refresh_sql(max_tickers, lookback_window):
+    '''generates the sql statement to send to the DB for getting a list of tickers that need their price history refreshed'''
     sql = '''
         SELECT REPLACE(c.Ticker,'.','-') AS Ticker
         FROM companies c
@@ -47,6 +50,7 @@ def get_price_refresh_sql(max_tickers, lookback_window):
     return sql
 
 def get_div_refresh_sql(max_tickers, lookback_window):
+    '''generates the sql statement to send to the DB for getting a list of tickers that need their dividend history refreshed'''
     sql = '''
         SELECT REPLACE(c.Ticker,'.','-') AS Ticker
         FROM companies c
@@ -67,6 +71,7 @@ def get_div_refresh_sql(max_tickers, lookback_window):
 
 # PIPELINE CLASS DEFINITION
 class Pipeline:
+    '''create a data pipeline with DB connection, urls, and other connection info'''
     def __init__(self, db_url, companies_data_url, div_data_url, sa_api_key):
         self.db_url = db_url
         self.companies_data_url = companies_data_url
@@ -85,6 +90,7 @@ class Pipeline:
             )
 
     def create_db_conn(self):
+        '''creates DB engine and DB conneciton for runing queries and executing procedures'''
         try:
             self.db_engine = create_engine(self.db_url)
             self.db_conn = self.db_engine.raw_connection()
@@ -92,12 +98,14 @@ class Pipeline:
             log_message(error, show=True)
 
     def load_df_to_stg(self, df, stg_tbl_name):
+        '''loads a dataframe directly to a staging table in the DB, using stg_tbl_name parameter for the name of the table'''
         try:
             df.to_sql(con=self.db_engine, name=stg_tbl_name, if_exists='replace')
         except Exception as error:
             log_message(error, show=True)           
 
     def call_proc(self, proc_name, args=None):
+        '''executes a proc in the db; args are optional'''
         try:
             cursor = self.db_conn.cursor()
             if args==None:
@@ -112,6 +120,7 @@ class Pipeline:
         return results
 
     def get_sandp_companies_list(self):
+        '''gets the current and historical list of S&P companies from wikipedia and updates the companies table in the DB'''
         try:
             context = ssl._create_unverified_context()
             response = req.urlopen(url=self.companies_data_url, context=context)
@@ -128,6 +137,7 @@ class Pipeline:
             log_message(error, show=True)         
 
     def get_ticker_list(self, sql):
+        '''generates a dataframe with list of tickers using the sql statement run on the DB'''
         try:
             cursor = self.db_conn.cursor()
             cursor.execute(sql)
@@ -140,6 +150,10 @@ class Pipeline:
         return df_tickers        
 
     def refresh_prices(self, max_tickers, lookback_window):
+        '''
+        calls the routine to refresh the prices table for (max_tickers) number of companies,
+        by quering the DB for companies that have no price history for the past (lookback_window) number of days
+        '''
         try:
             sql = get_price_refresh_sql(max_tickers, lookback_window)
             log_message('List of Tickers for Price Refresh:')
@@ -162,6 +176,11 @@ class Pipeline:
             log_message(error, show=True) 
 
     def refresh_dividends(self, max_tickers, lookback_window):
+        '''
+        calls the routine to refresh the dividends table for (max_tickers) number of companies,
+        by quering the DB for companies that have no dividend history for the past (lookback_window) number of days
+        based on dividends.ExDivDate
+        '''        
         try:
             sql = get_div_refresh_sql(max_tickers, lookback_window)
             log_message('List of Tickers for Dividend Refresh:')
@@ -191,6 +210,7 @@ class Pipeline:
             log_message(error, show=True) 
 
     def close_db_conn(self):
+        '''closes the DB connection'''
         self.db_conn.close()
 
 # FULL PIPELINE RUN DEFINITION
@@ -229,10 +249,10 @@ def run_full_pipline():
     pipeline1.get_sandp_companies_list()
 
     # refresh price history data
-    pipeline1.refresh_prices(max_tickers=10, lookback_window=0)
+    pipeline1.refresh_prices(max_tickers=5, lookback_window=0)
 
     # refresh dividend history
-    pipeline1.refresh_dividends(max_tickers=2, lookback_window=50)
+    pipeline1.refresh_dividends(max_tickers=5, lookback_window=50)
 
     # close db connection at end of run
     pipeline1.close_db_conn()
