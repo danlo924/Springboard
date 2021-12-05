@@ -1,9 +1,8 @@
-import os, ssl
+import ssl
 import urllib.request as req
 import pandas as pd
 from sqlalchemy import create_engine
 import yfinance as yf
-import yahoofinancials as yafin
 
 # CREATE ENGINE FOR MYSQL INVESTING DATABASE
 investing_db_engine = create_engine(
@@ -11,8 +10,7 @@ investing_db_engine = create_engine(
             host='127.0.0.1'
             ,db='investing'
             ,user='root'
-            ,pw='<pw_here>'
-            # ,pw='<pw_here>'
+            ,pw='Nuggy557$'
         )
     )
 
@@ -52,11 +50,11 @@ sql = '''SELECT REPLACE(c.Ticker,'.','-')
         FROM companies c2
             INNER JOIN prices p ON c2.CompanyID = p.CompanyID
         WHERE c2.CompanyID = c.CompanyID
-            AND p.Date > date_sub(now(), interval 7 day)
+            AND p.Date > date_sub(now(), interval 0 day)
         LIMIT 1
     )
     ORDER BY Ticker
-    LIMIT 1000;
+    LIMIT 5;
     '''
 
 # ITERATE THROUGH STOCKS AND GET PRICE HISTORY
@@ -72,9 +70,10 @@ try:
         try:
             price_hist = yf.Ticker(ticker)
             price_hist_df = price_hist.history(period="45y") # get at most 45 years of price history, which should cover 1980 to 2021
-            price_hist_df.to_sql(con=investing_db_engine, name='_stg_price_hist', if_exists='replace')            
+            price_hist_df.to_sql(con=investing_db_engine, name='_stg_price_hist', if_exists='replace') 
+            price_hist.dividends.to_sql(con=investing_db_engine, name='_stg_has_div', if_exists='replace')            
             cursor_pr = investing_db_conn.cursor()
-            cursor_pr.callproc('sp_refresh_prices', args=[ticker,])
+            cursor_pr.callproc('sp_refresh_prices_company_data', args=[ticker,])
             results = list(cursor_pr.fetchall())
             cursor_pr.close()
             investing_db_conn.commit()

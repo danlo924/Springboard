@@ -1,0 +1,203 @@
+15:38:23,116 root DEBUG 
+Pipeline Run Details (2021-12-04 15:38:23.116458):
+Database connection info: mysql+pymysql://root:Nuggy557$@127.0.0.1/investing
+Companies data url: https://en.wikipedia.org/wiki/List_of_S%26P_500_companies
+Dividend data API url: https://seeking-alpha.p.rapidapi.com/symbols/get-dividend-history
+Seeking Aplha API key: 4e36d82008mshddcfe888e5c9e3cp1b8083jsn7222cce4b0ec
+15:38:24,178 numexpr.utils INFO NumExpr defaulting to 4 threads.
+15:38:24,212 root DEBUG S&P Current Company List DataFrame Loaded: 505 Rows, 9 Columns.
+15:38:24,212 root DEBUG S&P Historical Company List DataFrame Loaded: 281 Rows, 6 Columns.
+15:38:25,61 root DEBUG SQL for Price Refresh: 
+            SELECT REPLACE(c.Ticker,'.','-') AS Ticker
+            FROM companies c
+            WHERE NOT EXISTS 
+            (
+                SELECT 1
+                FROM companies c2
+                    INNER JOIN prices p ON c2.CompanyID = p.CompanyID
+                WHERE c2.CompanyID = c.CompanyID
+                    AND p.Date > date_sub(now(), interval 0 day)
+                LIMIT 1
+            )
+            ORDER BY Ticker
+            LIMIT 25;
+15:38:25,61 root DEBUG List of Tickers for Price Refresh:
+15:38:25,217 root DEBUG    Ticker
+0    ^DJI
+1   ^GSPC
+2   ^IXIC
+3    ^NYA
+4    ^RUT
+5    ^VIX
+6    ^XAX
+7       A
+8      AA
+9     AAL
+10    AAP
+11   AAPL
+12   ABBV
+13    ABC
+14    ABK
+15   ABMD
+16    ABS
+17    ABT
+18   ACAS
+19    ACE
+20    ACN
+21   ADBE
+22    ADI
+23    ADM
+24    ADP
+15:38:25,223 root DEBUG Get the price history for: ^DJI
+15:38:25,237 urllib3.connectionpool DEBUG Starting new HTTPS connection (1): query2.finance.yahoo.com:443
+15:38:25,481 urllib3.connectionpool DEBUG https://query2.finance.yahoo.com:443 "GET /v8/finance/chart/%5EDJI?range=40y&interval=1d&includePrePost=False&events=div%2Csplits HTTP/1.1" 200 None
+15:38:25,932 root DEBUG ^DJI Price History DataFrame Loaded: 7539 Rows, 7 Columns.
+15:38:26,877 root DEBUG Get the price history for: ^GSPC
+15:38:26,883 urllib3.connectionpool DEBUG Starting new HTTPS connection (1): query2.finance.yahoo.com:443
+15:38:27,72 urllib3.connectionpool DEBUG https://query2.finance.yahoo.com:443 "GET /v8/finance/chart/%5EGSPC?range=40y&interval=1d&includePrePost=False&events=div%2Csplits HTTP/1.1" 200 None
+15:38:27,368 root DEBUG ^GSPC Price History DataFrame Loaded: 10086 Rows, 7 Columns.
+15:38:28,276 root DEBUG Get the price history for: ^IXIC
+15:38:28,281 urllib3.connectionpool DEBUG Starting new HTTPS connection (1): query2.finance.yahoo.com:443
+15:38:28,484 urllib3.connectionpool DEBUG https://query2.finance.yahoo.com:443 "GET /v8/finance/chart/%5EIXIC?range=40y&interval=1d&includePrePost=False&events=div%2Csplits HTTP/1.1" 200 None
+15:38:28,762 root DEBUG ^IXIC Price History DataFrame Loaded: 10058 Rows, 7 Columns.
+15:38:29,846 root DEBUG Get the price history for: ^NYA
+15:38:29,853 urllib3.connectionpool DEBUG Starting new HTTPS connection (1): query2.finance.yahoo.com:443
+15:38:30,81 urllib3.connectionpool DEBUG https://query2.finance.yahoo.com:443 "GET /v8/finance/chart/%5ENYA?range=40y&interval=1d&includePrePost=False&events=div%2Csplits HTTP/1.1" 200 None
+15:38:30,350 root DEBUG ^NYA Price History DataFrame Loaded: 9678 Rows, 7 Columns.
+15:38:31,409 root DEBUG Get the price history for: ^RUT
+15:38:31,415 urllib3.connectionpool DEBUG Starting new HTTPS connection (1): query2.finance.yahoo.com:443
+15:38:31,597 urllib3.connectionpool DEBUG https://query2.finance.yahoo.com:443 "GET /v8/finance/chart/%5ERUT?range=40y&interval=1d&includePrePost=False&events=div%2Csplits HTTP/1.1" 200 None
+15:38:31,918 root DEBUG ^RUT Price History DataFrame Loaded: 8629 Rows, 7 Columns.
+15:38:33,17 root DEBUG Get the price history for: ^VIX
+15:38:33,23 urllib3.connectionpool DEBUG Starting new HTTPS connection (1): query2.finance.yahoo.com:443
+15:38:33,203 urllib3.connectionpool DEBUG https://query2.finance.yahoo.com:443 "GET /v8/finance/chart/%5EVIX?range=40y&interval=1d&includePrePost=False&events=div%2Csplits HTTP/1.1" 200 None
+15:38:33,425 root DEBUG ^VIX Price History DataFrame Loaded: 7954 Rows, 7 Columns.
+15:38:34,642 root DEBUG Get the price history for: ^XAX
+15:38:34,679 urllib3.connectionpool DEBUG Starting new HTTPS connection (1): query2.finance.yahoo.com:443
+15:38:34,875 urllib3.connectionpool DEBUG https://query2.finance.yahoo.com:443 "GET /v8/finance/chart/%5EXAX?range=40y&interval=1d&includePrePost=False&events=div%2Csplits HTTP/1.1" 200 None
+15:38:35,99 root DEBUG ^XAX Price History DataFrame Loaded: 6531 Rows, 7 Columns.
+15:38:36,105 root DEBUG Get the price history for: A
+15:38:36,113 urllib3.connectionpool DEBUG Starting new HTTPS connection (1): query2.finance.yahoo.com:443
+15:38:36,356 urllib3.connectionpool DEBUG https://query2.finance.yahoo.com:443 "GET /v8/finance/chart/A?range=40y&interval=1d&includePrePost=False&events=div%2Csplits HTTP/1.1" 200 None
+15:38:36,575 root DEBUG A Price History DataFrame Loaded: 5547 Rows, 7 Columns.
+15:38:37,168 root DEBUG A Dividends DataFrame Loaded: 40 Rows, 1 Columns.
+15:38:37,448 root DEBUG Get the price history for: AA
+15:38:37,457 urllib3.connectionpool DEBUG Starting new HTTPS connection (1): query2.finance.yahoo.com:443
+15:38:37,777 urllib3.connectionpool DEBUG https://query2.finance.yahoo.com:443 "GET /v8/finance/chart/AA?range=40y&interval=1d&includePrePost=False&events=div%2Csplits HTTP/1.1" 200 None
+15:38:38,123 root DEBUG AA Price History DataFrame Loaded: 10086 Rows, 7 Columns.
+15:38:38,880 root DEBUG AA Dividends DataFrame Loaded: 142 Rows, 1 Columns.
+15:38:39,302 root DEBUG Get the price history for: AAL
+15:38:39,310 urllib3.connectionpool DEBUG Starting new HTTPS connection (1): query2.finance.yahoo.com:443
+15:38:39,579 urllib3.connectionpool DEBUG https://query2.finance.yahoo.com:443 "GET /v8/finance/chart/AAL?range=40y&interval=1d&includePrePost=False&events=div%2Csplits HTTP/1.1" 200 None
+15:38:39,748 root DEBUG AAL Price History DataFrame Loaded: 4076 Rows, 7 Columns.
+15:38:40,173 root DEBUG AAL Dividends DataFrame Loaded: 23 Rows, 1 Columns.
+15:38:40,726 root DEBUG Get the price history for: AAP
+15:38:40,737 urllib3.connectionpool DEBUG Starting new HTTPS connection (1): query2.finance.yahoo.com:443
+15:38:40,988 urllib3.connectionpool DEBUG https://query2.finance.yahoo.com:443 "GET /v8/finance/chart/AAP?range=40y&interval=1d&includePrePost=False&events=div%2Csplits HTTP/1.1" 200 None
+15:38:41,163 root DEBUG AAP Price History DataFrame Loaded: 5039 Rows, 7 Columns.
+15:38:41,720 root DEBUG AAP Dividends DataFrame Loaded: 63 Rows, 1 Columns.
+15:38:41,999 root DEBUG Get the price history for: AAPL
+15:38:42,4 urllib3.connectionpool DEBUG Starting new HTTPS connection (1): query2.finance.yahoo.com:443
+15:38:42,313 urllib3.connectionpool DEBUG https://query2.finance.yahoo.com:443 "GET /v8/finance/chart/AAPL?range=40y&interval=1d&includePrePost=False&events=div%2Csplits HTTP/1.1" 200 None
+15:38:42,787 root DEBUG AAPL Price History DataFrame Loaded: 10086 Rows, 7 Columns.
+15:38:44,287 root DEBUG AAPL Dividends DataFrame Loaded: 73 Rows, 1 Columns.
+15:38:44,799 root DEBUG Get the price history for: ABBV
+15:38:44,805 urllib3.connectionpool DEBUG Starting new HTTPS connection (1): query2.finance.yahoo.com:443
+15:38:44,968 urllib3.connectionpool DEBUG https://query2.finance.yahoo.com:443 "GET /v8/finance/chart/ABBV?range=40y&interval=1d&includePrePost=False&events=div%2Csplits HTTP/1.1" 200 None
+15:38:45,149 root DEBUG ABBV Price History DataFrame Loaded: 2248 Rows, 7 Columns.
+15:38:45,428 root DEBUG ABBV Dividends DataFrame Loaded: 36 Rows, 1 Columns.
+15:38:45,811 root DEBUG Get the price history for: ABC
+15:38:45,826 urllib3.connectionpool DEBUG Starting new HTTPS connection (1): query2.finance.yahoo.com:443
+15:38:46,41 urllib3.connectionpool DEBUG https://query2.finance.yahoo.com:443 "GET /v8/finance/chart/ABC?range=40y&interval=1d&includePrePost=False&events=div%2Csplits HTTP/1.1" 200 None
+15:38:46,230 root DEBUG ABC Price History DataFrame Loaded: 6716 Rows, 7 Columns.
+15:38:46,941 root DEBUG ABC Dividends DataFrame Loaded: 82 Rows, 1 Columns.
+15:38:47,439 root DEBUG Get the price history for: ABK
+15:38:47,459 urllib3.connectionpool DEBUG Starting new HTTPS connection (1): query2.finance.yahoo.com:443
+15:38:47,676 urllib3.connectionpool DEBUG https://query2.finance.yahoo.com:443 "GET /v8/finance/chart/ABK?range=40y&interval=1d&includePrePost=False&events=div%2Csplits HTTP/1.1" 200 None
+15:38:48,69 root DEBUG ABK Price History DataFrame Loaded: 2754 Rows, 7 Columns.
+15:38:48,792 root DEBUG Get the price history for: ABMD
+15:38:48,804 urllib3.connectionpool DEBUG Starting new HTTPS connection (1): query2.finance.yahoo.com:443
+15:38:49,59 urllib3.connectionpool DEBUG https://query2.finance.yahoo.com:443 "GET /v8/finance/chart/ABMD?range=40y&interval=1d&includePrePost=False&events=div%2Csplits HTTP/1.1" 200 None
+15:38:49,302 root DEBUG ABMD Price History DataFrame Loaded: 8575 Rows, 7 Columns.
+15:38:50,261 root DEBUG Get the price history for: ABS
+15:38:50,273 urllib3.connectionpool DEBUG Starting new HTTPS connection (1): query2.finance.yahoo.com:443
+15:38:50,462 urllib3.connectionpool DEBUG https://query2.finance.yahoo.com:443 "GET /v8/finance/chart/ABS?range=40y&interval=1d&includePrePost=False&events=div%2Csplits HTTP/1.1" 200 None
+15:38:50,610 root DEBUG ABS Price History DataFrame Loaded: 192 Rows, 7 Columns.
+15:38:51,105 root DEBUG Get the price history for: ABT
+15:38:51,122 urllib3.connectionpool DEBUG Starting new HTTPS connection (1): query2.finance.yahoo.com:443
+15:38:51,471 urllib3.connectionpool DEBUG https://query2.finance.yahoo.com:443 "GET /v8/finance/chart/ABT?range=40y&interval=1d&includePrePost=False&events=div%2Csplits HTTP/1.1" 200 None
+15:38:52,128 root DEBUG ABT Price History DataFrame Loaded: 10086 Rows, 7 Columns.
+15:38:52,893 root DEBUG ABT Dividends DataFrame Loaded: 156 Rows, 1 Columns.
+15:38:53,310 root DEBUG Get the price history for: ACAS
+15:38:53,317 urllib3.connectionpool DEBUG Starting new HTTPS connection (1): query2.finance.yahoo.com:443
+15:38:53,456 urllib3.connectionpool DEBUG https://query2.finance.yahoo.com:443 "GET /v8/finance/chart/ACAS?range=40y&interval=1d&includePrePost=False&events=div%2Csplits HTTP/1.1" 200 692
+15:38:53,472 root DEBUG Get the price history for: ACE
+15:38:53,491 urllib3.connectionpool DEBUG Starting new HTTPS connection (1): query2.finance.yahoo.com:443
+15:38:53,634 urllib3.connectionpool DEBUG https://query2.finance.yahoo.com:443 "GET /v8/finance/chart/ACE?range=40y&interval=1d&includePrePost=False&events=div%2Csplits HTTP/1.1" 200 None
+15:38:53,714 root DEBUG ACE Price History DataFrame Loaded: 113 Rows, 7 Columns.
+15:38:54,12 root DEBUG Get the price history for: ACN
+15:38:54,22 urllib3.connectionpool DEBUG Starting new HTTPS connection (1): query2.finance.yahoo.com:443
+15:38:54,223 urllib3.connectionpool DEBUG https://query2.finance.yahoo.com:443 "GET /v8/finance/chart/ACN?range=40y&interval=1d&includePrePost=False&events=div%2Csplits HTTP/1.1" 200 None
+15:38:54,438 root DEBUG ACN Price History DataFrame Loaded: 5128 Rows, 7 Columns.
+15:38:55,60 root DEBUG ACN Dividends DataFrame Loaded: 33 Rows, 1 Columns.
+15:38:55,466 root DEBUG Get the price history for: ADBE
+15:38:55,474 urllib3.connectionpool DEBUG Starting new HTTPS connection (1): query2.finance.yahoo.com:443
+15:38:55,735 urllib3.connectionpool DEBUG https://query2.finance.yahoo.com:443 "GET /v8/finance/chart/ADBE?range=40y&interval=1d&includePrePost=False&events=div%2Csplits HTTP/1.1" 200 None
+15:38:56,153 root DEBUG ADBE Price History DataFrame Loaded: 8900 Rows, 7 Columns.
+15:38:57,55 root DEBUG ADBE Dividends DataFrame Loaded: 63 Rows, 1 Columns.
+15:38:57,590 root DEBUG Get the price history for: ADI
+15:38:57,597 urllib3.connectionpool DEBUG Starting new HTTPS connection (1): query2.finance.yahoo.com:443
+15:38:57,893 urllib3.connectionpool DEBUG https://query2.finance.yahoo.com:443 "GET /v8/finance/chart/ADI?range=40y&interval=1d&includePrePost=False&events=div%2Csplits HTTP/1.1" 200 None
+15:38:58,206 root DEBUG ADI Price History DataFrame Loaded: 10085 Rows, 7 Columns.
+15:38:59,173 root DEBUG ADI Dividends DataFrame Loaded: 73 Rows, 1 Columns.
+15:38:59,559 root DEBUG Get the price history for: ADM
+15:38:59,564 urllib3.connectionpool DEBUG Starting new HTTPS connection (1): query2.finance.yahoo.com:443
+15:38:59,819 urllib3.connectionpool DEBUG https://query2.finance.yahoo.com:443 "GET /v8/finance/chart/ADM?range=40y&interval=1d&includePrePost=False&events=div%2Csplits HTTP/1.1" 200 None
+15:39:00,46 root DEBUG ADM Price History DataFrame Loaded: 10086 Rows, 7 Columns.
+15:39:01,149 root DEBUG ADM Dividends DataFrame Loaded: 155 Rows, 1 Columns.
+15:39:01,690 root DEBUG Get the price history for: ADP
+15:39:01,696 urllib3.connectionpool DEBUG Starting new HTTPS connection (1): query2.finance.yahoo.com:443
+15:39:01,983 urllib3.connectionpool DEBUG https://query2.finance.yahoo.com:443 "GET /v8/finance/chart/ADP?range=40y&interval=1d&includePrePost=False&events=div%2Csplits HTTP/1.1" 200 None
+15:39:02,424 root DEBUG ADP Price History DataFrame Loaded: 10086 Rows, 7 Columns.
+15:39:03,311 root DEBUG ADP Dividends DataFrame Loaded: 154 Rows, 1 Columns.
+15:39:03,686 root DEBUG SQL for Dividends Refresh: 
+            SELECT REPLACE(c.Ticker,'.','-') AS Ticker
+            FROM companies c
+            WHERE c.HasDividend = 1
+                AND NOT EXISTS 
+                (
+                    SELECT 1
+                    FROM companies c2
+                        INNER JOIN dividends d ON c2.CompanyID = d.CompanyID
+                    WHERE c2.CompanyID = c.CompanyID
+                        AND d.ExDivDate > date_sub(now(), interval 50 day)
+                    LIMIT 1
+                )
+            ORDER BY Ticker
+            LIMIT 5;
+15:39:03,686 root DEBUG List of Tickers for Dividend Refresh:
+15:39:03,690 root DEBUG   Ticker
+0    AAL
+1    ABT
+2    ACN
+3   ADBE
+4    ADI
+15:39:03,693 root DEBUG Get the dividend history for: AAL
+15:39:03,694 urllib3.connectionpool DEBUG Starting new HTTPS connection (1): seeking-alpha.p.rapidapi.com:443
+15:39:04,562 urllib3.connectionpool DEBUG https://seeking-alpha.p.rapidapi.com:443 "GET /symbols/get-dividend-history?symbol=AAL&years=40&group_by=month HTTP/1.1" 200 6241
+15:39:04,597 root DEBUG AAL Full Dividend History DataFrame Loaded: 23 Rows, 12 Columns.
+15:39:04,943 root DEBUG Get the dividend history for: ABT
+15:39:04,947 urllib3.connectionpool DEBUG Starting new HTTPS connection (1): seeking-alpha.p.rapidapi.com:443
+15:39:05,796 urllib3.connectionpool DEBUG https://seeking-alpha.p.rapidapi.com:443 "GET /symbols/get-dividend-history?symbol=ABT&years=40&group_by=month HTTP/1.1" 200 12059
+15:39:05,815 root DEBUG ABT Full Dividend History DataFrame Loaded: 44 Rows, 12 Columns.
+15:39:06,173 root DEBUG Get the dividend history for: ACN
+15:39:06,176 urllib3.connectionpool DEBUG Starting new HTTPS connection (1): seeking-alpha.p.rapidapi.com:443
+15:39:06,973 urllib3.connectionpool DEBUG https://seeking-alpha.p.rapidapi.com:443 "GET /symbols/get-dividend-history?symbol=ACN&years=40&group_by=month HTTP/1.1" 200 7094
+15:39:06,981 root DEBUG ACN Full Dividend History DataFrame Loaded: 26 Rows, 12 Columns.
+15:39:07,147 root DEBUG Get the dividend history for: ADBE
+15:39:07,152 urllib3.connectionpool DEBUG Starting new HTTPS connection (1): seeking-alpha.p.rapidapi.com:443
+15:39:07,910 urllib3.connectionpool DEBUG https://seeking-alpha.p.rapidapi.com:443 "GET /symbols/get-dividend-history?symbol=ADBE&years=40&group_by=month HTTP/1.1" 200 40
+15:39:07,912 root DEBUG Get the dividend history for: ADI
+15:39:07,913 urllib3.connectionpool DEBUG Starting new HTTPS connection (1): seeking-alpha.p.rapidapi.com:443
+15:39:08,682 urllib3.connectionpool DEBUG https://seeking-alpha.p.rapidapi.com:443 "GET /symbols/get-dividend-history?symbol=ADI&years=40&group_by=month HTTP/1.1" 200 11883
+15:39:08,699 root DEBUG ADI Full Dividend History DataFrame Loaded: 44 Rows, 12 Columns.
