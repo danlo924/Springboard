@@ -1,2 +1,3 @@
 Capstone/DataCollection/ignore
+Capstone/DataCollection/__pycache__
 Capstone/DataCollection/secrets.py
