@@ -1,10 +1,14 @@
 from secrets import secrets
 from pyspark.sql import SparkSession
 
-#### COMMON FILE PROCESSING FUNCTION ####
+#### GLOBAL VARIABLES
+make, year = None, None
+
 def process_file(file):
+    """Process a file by first propagating vehicle make and model year to all accident records (incident_type='A')
+    based off of VIN number from initial sales (incident_type='I') and then sum all accident records grouping by 
+    vehicle make and model year"""
     print("Processing File: " + file)
-    make, year = None, None
     raw = spark.sparkContext.textFile(file)
     vin_kv = raw.map(lambda x: extract_vin_key_value(x))
     enhance_make = vin_kv.groupByKey().flatMap(lambda kv: populate_make(kv[1]))
@@ -14,6 +18,7 @@ def process_file(file):
         print(str(result[0]) + "," + str(result[1]))
 
 def extract_vin_key_value(line):
+    """Create a key / value tuple with VIN and vehicle info"""
     line = line.strip()
     line = line.split(",")
     vin = line[2]
@@ -21,6 +26,7 @@ def extract_vin_key_value(line):
     return (vin, vals)
 
 def populate_make(values):
+    """Propagate vehicle info to all accident records (incident_type='A)"""
     output = []
     for mkyr in values:
         if mkyr[1]=='I':
@@ -32,6 +38,7 @@ def populate_make(values):
     return output
 
 def extract_make_key_value(x):
+    """Create Key/Value tuples with Make-Year and Count of 1"""
     return (x[2] + "-" + x[3], 1)
 
 #### CREATE SPARK SESSION ####       
