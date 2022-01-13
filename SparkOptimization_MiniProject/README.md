@@ -2,8 +2,8 @@
 
 ## **Overview**:
 ### Data for the mini-project: 
-####* 4 "questions" parquet files (/Optimization/output/questions-transformed)
-####* 4 "answers" parquet files (/Optimization/data/answers)
+#### 4 "questions" parquet files (/Optimization/output/questions-transformed)
+#### 4 "answers" parquet files (/Optimization/data/answers)
 ### The task is to rewrite and optimze the /Optimization/**optimize.py** script
 ### The optimized version is here: /Optimization/**optimized.py**
 ### Steps taken to optimze the script include:
