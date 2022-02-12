@@ -1,6 +1,6 @@
 # Kafka Mini-Project - Instructions
 
-### 1. Start Kafka Broker and Zooker Services in an Isolated Cluster:
+### 1. Start Kafka Broker and Zookeeper Services in an Isolated Cluster:
 docker-compose -f docker-compose.kafka.yml up
 
 ### 2. Start Consumer for Legit Transactions:
