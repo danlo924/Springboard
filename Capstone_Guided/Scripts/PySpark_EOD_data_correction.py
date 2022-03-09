@@ -21,7 +21,7 @@ quote_common = spark.read.parquet("output_dir/partition=Q")
 
 ### get relevant fields from trade and quote dataframes
 trade = trade_common.select("trade_dt", "symbol", "exchange", "event_tm", "event_seq_nb", "arrival_tm", "trade_pr")
-quote = quote_common.select("trade_dt", "symbol", "exchange", "event_tm", "event_seq_nb", "arrival_tm", "bid_pr", "ask_pr")
+quote = quote_common.select("trade_dt", "symbol", "exchange", "event_tm", "event_seq_nb", "arrival_tm", "bid_pr", "bid_size", "ask_pr", "ask_size")
 
 ### define fields for uniquely identifying records and sorting
 partition_columns = ["trade_dt","symbol","exchange","event_tm","event_seq_nb"]
