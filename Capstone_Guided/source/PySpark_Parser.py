@@ -1,10 +1,8 @@
+import os
 import json
 from datetime import datetime
 from decimal import Decimal
-from secrets import secrets
-from pyspark.sql import SparkSession
 from pyspark.sql.types import DateType, DecimalType, IntegerType, StructType, StructField, StringType, TimestampType
-from notebookutils import mssparkutils
 
 #### Create Final Output Schema ####
 final_schema = StructType([
@@ -85,47 +83,22 @@ def parse_json(line:str):
     except Exception as e:
         return common_event(None, None, None, None, None, None, None, None, None, None, None, None, None, "B", line) 
 
-#### RECURSE AZURE BLOB STORAGE PATH AND LIST ALL FILES ####
-def get_files_recursive(path: str, folder_depth: int):
-    all_files = mssparkutils.fs.ls(path)
-    for f in all_files:
-        if f.size != 0:
-            yield f
-    if folder_depth > 1:
-        for f in all_files:
-            if f.size != 0:
-                continue
-            for p in get_files_recursive(f.path, folder_depth - 1):
-                yield p
-    else:
-        for f in all_files:
-            if f.size == 0:
-                yield f
+class DataLoader:
+    def __init__(self, spark):
+        self.spark = spark
 
-#### COMMON FILE PROCESSING FUNCTION ####
-def process_files(azure_container_path, parser_func):
-    all_files = get_files_recursive(azure_container_path, folder_depth=10)
-    for file in all_files:
-        if file.path.endswith(".txt"):
-            print("Processing File: " + file.path)
-            raw = spark.sparkContext.textFile(file.path)
-            parsed = raw.map(lambda line: parser_func(line))
-            data = spark.createDataFrame(parsed, schema=final_schema)
-            data.write.partitionBy("partition").mode("append").parquet("output_dir")
+    #### COMMON FILE PROCESSING FUNCTION ####
+    def process_files(self, folder_path, parser_func, spark):
+        for path, dirs, files in os.walk(folder_path):
+            for file in files:
+                if file.endswith(".txt"):
+                    file_path = os.path.join(path, file)
+                    print("Processing File: " + file_path)
+                    raw = spark.sparkContext.textFile(file_path)
+                    parsed = raw.map(lambda line: parser_func(line))
+                    data = spark.createDataFrame(parsed, schema=final_schema)
+                    data.write.partitionBy("partition").mode("append").parquet("output_dir")
 
-
-#### CREATE SPARK SESSION ####       
-spark = SparkSession.builder.master('local').appName('app').getOrCreate()
-spark.conf.set(
-    "fs.azure.account.key.azblobstoragedwilde.blob.core.windows.net",
-    secrets.get('azblobkey')
-    )
-
-#### PROCESS ALL CSV FILES IN THE data/csv DIRECTORY ####
-process_files("wasbs://mycontainer@azblobstoragedwilde.blob.core.windows.net/data/csv", parse_csv)
-
-#### PROCESS ALL CSV FILES IN THE data/json DIRECTORY ####
-process_files("wasbs://mycontainer@azblobstoragedwilde.blob.core.windows.net/data/json", parse_json)
 
 
  
