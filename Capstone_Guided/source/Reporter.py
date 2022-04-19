@@ -25,7 +25,6 @@ class Reporter:
         """)
 
         ### write output to "temp_trade_moving_avg" table
-        # mov_avg_df.write.mode("overwrite").option("path", "spark-warehouse/temp_trade_moving_avg").saveAsTable("temp_trade_moving_avg")        
         mov_avg_df.write.mode("overwrite").saveAsTable("temp_trade_moving_avg")        
 
         ### get previous days trades from temp "trades" view
@@ -48,7 +47,6 @@ class Reporter:
         """)
 
         ### write output to "temp_last_trade" table
-        # last_pr_df.write.mode("overwrite").option("path", "spark-warehouse/temp_last_trade").saveAsTable("temp_last_trade")        
         last_pr_df.write.mode("overwrite").saveAsTable("temp_last_trade")        
 
         ### read quote parquet files from azure blob storage

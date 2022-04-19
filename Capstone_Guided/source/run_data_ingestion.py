@@ -35,7 +35,7 @@ def run_data_ingestion():
         dataloader.process_files(secrets.get('json_path'), parse_json, spark)
 
         #### EOD Load ####
-        ## read parquet files from azure blob storage
+        ## read parquet files from storage
         trade_common = spark.read.parquet("output_dir/partition=T")
         quote_common = spark.read.parquet("output_dir/partition=Q")
 
