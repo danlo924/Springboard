@@ -1,4 +1,3 @@
-import os
 import json
 from datetime import datetime
 from decimal import Decimal
@@ -81,23 +80,8 @@ def parse_json(line:str):
                 None, None, Decimal(record["bid_pr"]), int(record["bid_size"]), Decimal(record["ask_pr"]), int(record["ask_size"]), "Q", None)
             return event
     except Exception as e:
-        return common_event(None, None, None, None, None, None, None, None, None, None, None, None, None, "B", line) 
-
-class DataLoader:
-    def __init__(self, spark):
-        self.spark = spark
-
-    #### COMMON FILE PROCESSING FUNCTION ####
-    def process_files(self, folder_path, parser_func, spark):
-        for path, dirs, files in os.walk(folder_path):
-            for file in files:
-                if file.endswith(".txt"):
-                    file_path = os.path.join(path, file)
-                    print("Processing File: " + file_path)
-                    raw = spark.sparkContext.textFile(file_path)
-                    parsed = raw.map(lambda line: parser_func(line))
-                    data = spark.createDataFrame(parsed, schema=final_schema)
-                    data.write.partitionBy("partition").mode("append").parquet("output_dir")
+        return common_event(None, None, None, None, None, None, None, None, None, None, None, None, None, "B", line)
+        
 
 
 
