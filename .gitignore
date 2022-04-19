@@ -3,4 +3,5 @@ Capstone/DataCollection/__pycache__
 Capstone/DataCollection/secrets.py
 Capstone_Guided/Scripts/secrets.py
 Capstone_Guided/Scripts/ignore
+Capstone_Guided/ignore
 **/secrets.py
