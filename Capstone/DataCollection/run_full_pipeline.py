@@ -29,10 +29,10 @@ def run_full_pipline():
         b. iterate the list of Tickers and
             i. get dividend history to a staging table
             ii. call sp_refresh_dividends to refresh the dividends table
-    4. analyze prices
-        a. analyze price changes 30 days before and after each ex-dividend date
+    4. analyze prices and get trading returns
+        a. analyze price changes N number of days before and after each ex-dividend date 
         b. normalize returns against the S&P averages during the same period
-        c. summarize average returns by Ticker, by for each possible trading window surrounding ex-dividend dates
+        c. group and summarize average returns for each Ticker + each possible trading window surrounding ex-dividend dates
     '''
 
     # instantiate pipeline object with db url, wikipedia url, seeking alpha url, and api key.
