@@ -14,3 +14,4 @@ FROM companies c
 GROUP BY c.CompanyID
 ORDER BY c.IsIndex DESC
 	,c.Name
+
