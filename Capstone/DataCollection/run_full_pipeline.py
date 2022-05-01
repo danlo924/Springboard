@@ -20,7 +20,7 @@ def run_full_pipline():
         c. call sp_refresh_companies to get latest list into the companies table
     2. refresh prices
         a. get list of tickers needing price refresh into list based on SQL query
-        b. iterate the list of Tickers and:  
+        b. iterate the list of Tickers and:
             i. get full price history to a staging table
             ii. get any dividend history to staging table
             iii. call sp_refresh_prices_company_data to refresh the prices table, and update the companies.HasDividend column
