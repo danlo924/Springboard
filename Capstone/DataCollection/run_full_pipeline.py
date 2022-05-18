@@ -56,8 +56,15 @@ def run_full_pipline():
     # refresh dividend history
     pipeline1.refresh_dividends(max_tickers=1, lookback_window=0)
 
-    # analyze prices and trading returns surrounding ex-dividend dates
-    pipeline1.get_trading_returns(days_before=30, days_after=30)    
+    # output dividends and prices surrounding ex-dividend dates
+    pipeline1.get_divs_and_prices_to_parquet()    
+
+    #### ANALYTICAL ETL:
+    #     if price history exists days_before and days_after and S&P hitory exists then
+    #       evaluate buying 30-1 days before and selling 0-30 days after and get optimal buy / sell CAGR vs S&P
+    #     else pass and give reason for passing this ex-div date
+    #     aggregate all dividend dates for each ticker to get an average best buy / sell dates per ticker
+    #     output files to parquet files  
 
     # close db connection at end of run
     pipeline1.close_db_conn()

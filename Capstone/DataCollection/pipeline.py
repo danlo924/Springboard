@@ -7,6 +7,8 @@ import yfinance as yf
 import log_helpers as l
 import urllib.request as req
 from datetime import datetime
+from pyspark.sql import SparkSession
+from pyspark.sql.types import FloatType, IntegerType, StructType, StructField, StringType, TimestampType
 from sqlalchemy import create_engine
 
 # PIPELINE CLASS DEFINITION
@@ -149,25 +151,35 @@ class Pipeline:
         except Exception as error:
             l.log_message(error, show=True) 
 
-    def get_trading_returns(self, days_before: int, days_after: int):            
+    def get_divs_and_prices_to_parquet(self):            
         '''
         for each Ticker, for each combination of days up to 30 days before and after the ex-dividend date,
-        calculate the total return after normalizing for S&P aveage returns during the same time period
         ''' 
         try:
-            sql = s.get_div_refresh_sql(max_tickers=2000, lookback_window=-365)  # use numbers that will get all div paying stocks
+            #### CREATE SPARK SESSION ####       
+            spark = SparkSession.builder.master('local').appName('app').getOrCreate()
+            spark.sparkContext.setLogLevel("WARN")  
+            output_schema = StructType([
+                StructField('Ticker', StringType(), True),
+                StructField('FreqType', StringType(), True),
+                StructField('ExDivDate', TimestampType(), True),
+                StructField('AdjAmount', FloatType(), True),
+                StructField('PriceDate', TimestampType(), True),
+                StructField('ExDivDays', IntegerType(), True),
+                StructField('AvgPrice', FloatType(), True),
+                StructField('SandPAvgPrice', FloatType(), True)
+            ])            
+            sql = s.get_div_refresh_sql(max_tickers=1000, lookback_window=-365)  # use numbers that will get all div paying stocks
             l.log_message('List of Tickers for Dividend Analysis:')  
             tickers = self.get_ticker_list(sql)      
             cnt = 1
             for _, row in tickers.iterrows():
                 ticker = str(row['Ticker'])
                 l.log_message('Analyze returns for : ' + ticker + ' Stock Number: ' + str(cnt), show=True)  
-                #     Create proc that takes (Ticker), returns all valid Ex-Div dates and prices, along with S&P prices
-                #         if price history exists days_before and days_after and S&P hitory exists then
-                #             evaluate buying 30-1 days before and selling 0-30 days after and get optimal buy / sell CAGR vs S&P
-                #         else pass and give reason for passing this ex-div date
-                #     aggregate all dividend dates for each ticker to get an average best buy / sell dates per ticker
-                #     output files to parquet files   
+                div_prices = self.call_proc('sp_get_dividends_and_prices_by_ticker', args=[ticker,])
+                div_prices_rdd = spark.sparkContext.parallelize(div_prices)
+                div_prices_df = spark.createDataFrame(div_prices_rdd,output_schema)
+                div_prices_df.write.partitionBy("Ticker").parquet("output".format("Ticker"), mode="append")
                 cnt += 1     
             l.log_message('Dividend Analysis completed successfully', show=True)
         except Exception as error:
