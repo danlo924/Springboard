@@ -1,0 +1,914 @@
+15:28:32,19 root DEBUG running analyzer now
+15:28:35,154 py4j.java_gateway DEBUG GatewayClient.address is deprecated and will be removed in version 1.0. Use GatewayParameters instead.
+15:28:35,157 py4j.clientserver DEBUG Command to send: A
+f6fe8f66154327867afe418669aa831d9c644742fff280e9e696c9098705086b
+
+15:28:35,175 py4j.clientserver DEBUG Answer received: !yv
+15:28:35,176 py4j.clientserver DEBUG Command to send: j
+i
+rj
+org.apache.spark.SparkConf
+e
+
+15:28:35,177 py4j.clientserver DEBUG Answer received: !yv
+15:28:35,177 py4j.clientserver DEBUG Command to send: j
+i
+rj
+org.apache.spark.api.java.*
+e
+
+15:28:35,178 py4j.clientserver DEBUG Answer received: !yv
+15:28:35,178 py4j.clientserver DEBUG Command to send: j
+i
+rj
+org.apache.spark.api.python.*
+e
+
+15:28:35,178 py4j.clientserver DEBUG Answer received: !yv
+15:28:35,178 py4j.clientserver DEBUG Command to send: j
+i
+rj
+org.apache.spark.ml.python.*
+e
+
+15:28:35,178 py4j.clientserver DEBUG Answer received: !yv
+15:28:35,178 py4j.clientserver DEBUG Command to send: j
+i
+rj
+org.apache.spark.mllib.api.python.*
+e
+
+15:28:35,179 py4j.clientserver DEBUG Answer received: !yv
+15:28:35,179 py4j.clientserver DEBUG Command to send: j
+i
+rj
+org.apache.spark.resource.*
+e
+
+15:28:35,179 py4j.clientserver DEBUG Answer received: !yv
+15:28:35,179 py4j.clientserver DEBUG Command to send: j
+i
+rj
+org.apache.spark.sql.*
+e
+
+15:28:35,179 py4j.clientserver DEBUG Answer received: !yv
+15:28:35,179 py4j.clientserver DEBUG Command to send: j
+i
+rj
+org.apache.spark.sql.api.python.*
+e
+
+15:28:35,180 py4j.clientserver DEBUG Answer received: !yv
+15:28:35,180 py4j.clientserver DEBUG Command to send: j
+i
+rj
+org.apache.spark.sql.hive.*
+e
+
+15:28:35,180 py4j.clientserver DEBUG Answer received: !yv
+15:28:35,180 py4j.clientserver DEBUG Command to send: j
+i
+rj
+scala.Tuple2
+e
+
+15:28:35,181 py4j.clientserver DEBUG Answer received: !yv
+15:28:35,181 py4j.clientserver DEBUG Command to send: r
+u
+SparkConf
+rj
+e
+
+15:28:35,183 py4j.clientserver DEBUG Answer received: !ycorg.apache.spark.SparkConf
+15:28:35,183 py4j.clientserver DEBUG Command to send: i
+org.apache.spark.SparkConf
+bTrue
+e
+
+15:28:35,189 py4j.clientserver DEBUG Answer received: !yro0
+15:28:35,189 py4j.clientserver DEBUG Command to send: c
+o0
+set
+sspark.master
+slocal
+e
+
+15:28:35,195 py4j.clientserver DEBUG Answer received: !yro1
+15:28:35,195 py4j.clientserver DEBUG Command to send: c
+o0
+set
+sspark.app.name
+sapp
+e
+
+15:28:35,196 py4j.clientserver DEBUG Answer received: !yro2
+15:28:35,196 py4j.clientserver DEBUG Command to send: c
+o0
+contains
+sspark.serializer.objectStreamReset
+e
+
+15:28:35,196 py4j.clientserver DEBUG Answer received: !ybfalse
+15:28:35,197 py4j.clientserver DEBUG Command to send: c
+o0
+set
+sspark.serializer.objectStreamReset
+s100
+e
+
+15:28:35,197 py4j.clientserver DEBUG Answer received: !yro3
+15:28:35,197 py4j.clientserver DEBUG Command to send: c
+o0
+contains
+sspark.rdd.compress
+e
+
+15:28:35,197 py4j.clientserver DEBUG Answer received: !ybfalse
+15:28:35,198 py4j.clientserver DEBUG Command to send: c
+o0
+set
+sspark.rdd.compress
+sTrue
+e
+
+15:28:35,198 py4j.clientserver DEBUG Answer received: !yro4
+15:28:35,198 py4j.clientserver DEBUG Command to send: c
+o0
+contains
+sspark.master
+e
+
+15:28:35,198 py4j.clientserver DEBUG Answer received: !ybtrue
+15:28:35,198 py4j.clientserver DEBUG Command to send: c
+o0
+contains
+sspark.app.name
+e
+
+15:28:35,199 py4j.clientserver DEBUG Answer received: !ybtrue
+15:28:35,199 py4j.clientserver DEBUG Command to send: c
+o0
+contains
+sspark.master
+e
+
+15:28:35,199 py4j.clientserver DEBUG Answer received: !ybtrue
+15:28:35,199 py4j.clientserver DEBUG Command to send: c
+o0
+get
+sspark.master
+e
+
+15:28:35,200 py4j.clientserver DEBUG Answer received: !yslocal
+15:28:35,200 py4j.clientserver DEBUG Command to send: c
+o0
+contains
+sspark.app.name
+e
+
+15:28:35,200 py4j.clientserver DEBUG Answer received: !ybtrue
+15:28:35,201 py4j.clientserver DEBUG Command to send: c
+o0
+get
+sspark.app.name
+e
+
+15:28:35,201 py4j.clientserver DEBUG Answer received: !ysapp
+15:28:35,201 py4j.clientserver DEBUG Command to send: c
+o0
+contains
+sspark.home
+e
+
+15:28:35,201 py4j.clientserver DEBUG Answer received: !ybfalse
+15:28:35,201 py4j.clientserver DEBUG Command to send: c
+o0
+getAll
+e
+
+15:28:35,202 py4j.clientserver DEBUG Answer received: !yto5
+15:28:35,202 py4j.clientserver DEBUG Command to send: a
+e
+o5
+e
+
+15:28:35,202 py4j.clientserver DEBUG Answer received: !yi7
+15:28:35,202 py4j.clientserver DEBUG Command to send: a
+g
+o5
+i0
+e
+
+15:28:35,203 py4j.clientserver DEBUG Answer received: !yro6
+15:28:35,203 py4j.clientserver DEBUG Command to send: c
+o6
+_1
+e
+
+15:28:35,203 py4j.clientserver DEBUG Answer received: !ysspark.master
+15:28:35,204 py4j.clientserver DEBUG Command to send: c
+o6
+_2
+e
+
+15:28:35,204 py4j.clientserver DEBUG Answer received: !yslocal
+15:28:35,204 py4j.clientserver DEBUG Command to send: a
+e
+o5
+e
+
+15:28:35,204 py4j.clientserver DEBUG Answer received: !yi7
+15:28:35,204 py4j.clientserver DEBUG Command to send: a
+g
+o5
+i1
+e
+
+15:28:35,205 py4j.clientserver DEBUG Answer received: !yro7
+15:28:35,205 py4j.clientserver DEBUG Command to send: c
+o7
+_1
+e
+
+15:28:35,205 py4j.clientserver DEBUG Answer received: !ysspark.app.name
+15:28:35,205 py4j.clientserver DEBUG Command to send: c
+o7
+_2
+e
+
+15:28:35,206 py4j.clientserver DEBUG Answer received: !ysapp
+15:28:35,206 py4j.clientserver DEBUG Command to send: a
+e
+o5
+e
+
+15:28:35,206 py4j.clientserver DEBUG Answer received: !yi7
+15:28:35,206 py4j.clientserver DEBUG Command to send: a
+g
+o5
+i2
+e
+
+15:28:35,206 py4j.clientserver DEBUG Answer received: !yro8
+15:28:35,206 py4j.clientserver DEBUG Command to send: c
+o8
+_1
+e
+
+15:28:35,206 py4j.clientserver DEBUG Answer received: !ysspark.rdd.compress
+15:28:35,207 py4j.clientserver DEBUG Command to send: c
+o8
+_2
+e
+
+15:28:35,207 py4j.clientserver DEBUG Answer received: !ysTrue
+15:28:35,207 py4j.clientserver DEBUG Command to send: a
+e
+o5
+e
+
+15:28:35,207 py4j.clientserver DEBUG Answer received: !yi7
+15:28:35,207 py4j.clientserver DEBUG Command to send: a
+g
+o5
+i3
+e
+
+15:28:35,207 py4j.clientserver DEBUG Answer received: !yro9
+15:28:35,207 py4j.clientserver DEBUG Command to send: c
+o9
+_1
+e
+
+15:28:35,208 py4j.clientserver DEBUG Answer received: !ysspark.serializer.objectStreamReset
+15:28:35,208 py4j.clientserver DEBUG Command to send: c
+o9
+_2
+e
+
+15:28:35,208 py4j.clientserver DEBUG Answer received: !ys100
+15:28:35,208 py4j.clientserver DEBUG Command to send: a
+e
+o5
+e
+
+15:28:35,208 py4j.clientserver DEBUG Answer received: !yi7
+15:28:35,208 py4j.clientserver DEBUG Command to send: a
+g
+o5
+i4
+e
+
+15:28:35,208 py4j.clientserver DEBUG Answer received: !yro10
+15:28:35,209 py4j.clientserver DEBUG Command to send: c
+o10
+_1
+e
+
+15:28:35,209 py4j.clientserver DEBUG Answer received: !ysspark.submit.pyFiles
+15:28:35,209 py4j.clientserver DEBUG Command to send: c
+o10
+_2
+e
+
+15:28:35,209 py4j.clientserver DEBUG Answer received: !ys
+15:28:35,209 py4j.clientserver DEBUG Command to send: a
+e
+o5
+e
+
+15:28:35,209 py4j.clientserver DEBUG Answer received: !yi7
+15:28:35,209 py4j.clientserver DEBUG Command to send: a
+g
+o5
+i5
+e
+
+15:28:35,210 py4j.clientserver DEBUG Answer received: !yro11
+15:28:35,210 py4j.clientserver DEBUG Command to send: c
+o11
+_1
+e
+
+15:28:35,210 py4j.clientserver DEBUG Answer received: !ysspark.submit.deployMode
+15:28:35,210 py4j.clientserver DEBUG Command to send: c
+o11
+_2
+e
+
+15:28:35,210 py4j.clientserver DEBUG Answer received: !ysclient
+15:28:35,210 py4j.clientserver DEBUG Command to send: a
+e
+o5
+e
+
+15:28:35,210 py4j.clientserver DEBUG Answer received: !yi7
+15:28:35,211 py4j.clientserver DEBUG Command to send: a
+g
+o5
+i6
+e
+
+15:28:35,211 py4j.clientserver DEBUG Answer received: !yro12
+15:28:35,211 py4j.clientserver DEBUG Command to send: c
+o12
+_1
+e
+
+15:28:35,211 py4j.clientserver DEBUG Answer received: !ysspark.ui.showConsoleProgress
+15:28:35,211 py4j.clientserver DEBUG Command to send: c
+o12
+_2
+e
+
+15:28:35,211 py4j.clientserver DEBUG Answer received: !ystrue
+15:28:35,211 py4j.clientserver DEBUG Command to send: a
+e
+o5
+e
+
+15:28:35,212 py4j.clientserver DEBUG Answer received: !yi7
+15:28:35,212 py4j.clientserver DEBUG Command to send: r
+u
+JavaSparkContext
+rj
+e
+
+15:28:35,223 py4j.clientserver DEBUG Answer received: !ycorg.apache.spark.api.java.JavaSparkContext
+15:28:35,223 py4j.clientserver DEBUG Command to send: i
+org.apache.spark.api.java.JavaSparkContext
+ro0
+e
+
+15:28:36,168 py4j.clientserver DEBUG Command to send: A
+f6fe8f66154327867afe418669aa831d9c644742fff280e9e696c9098705086b
+
+15:28:36,169 py4j.clientserver DEBUG Answer received: !yv
+15:28:36,169 py4j.clientserver DEBUG Command to send: m
+d
+o1
+e
+
+15:28:36,170 py4j.clientserver DEBUG Answer received: !yv
+15:28:36,170 py4j.clientserver DEBUG Command to send: m
+d
+o2
+e
+
+15:28:36,170 py4j.clientserver DEBUG Answer received: !yv
+15:28:36,170 py4j.clientserver DEBUG Command to send: m
+d
+o3
+e
+
+15:28:36,170 py4j.clientserver DEBUG Answer received: !yv
+15:28:36,171 py4j.clientserver DEBUG Command to send: m
+d
+o4
+e
+
+15:28:36,171 py4j.clientserver DEBUG Answer received: !yv
+15:28:36,171 py4j.clientserver DEBUG Command to send: m
+d
+o5
+e
+
+15:28:36,171 py4j.clientserver DEBUG Answer received: !yv
+15:28:38,646 py4j.clientserver DEBUG Answer received: !yro13
+15:28:38,646 py4j.clientserver DEBUG Command to send: c
+o13
+sc
+e
+
+15:28:38,651 py4j.clientserver DEBUG Answer received: !yro14
+15:28:38,651 py4j.clientserver DEBUG Command to send: c
+o14
+conf
+e
+
+15:28:38,669 py4j.clientserver DEBUG Answer received: !yro15
+15:28:38,674 py4j.clientserver DEBUG Command to send: r
+u
+PythonAccumulatorV2
+rj
+e
+
+15:28:38,677 py4j.clientserver DEBUG Answer received: !ycorg.apache.spark.api.python.PythonAccumulatorV2
+15:28:38,677 py4j.clientserver DEBUG Command to send: i
+org.apache.spark.api.python.PythonAccumulatorV2
+s127.0.0.1
+i53046
+sf6fe8f66154327867afe418669aa831d9c644742fff280e9e696c9098705086b
+e
+
+15:28:38,678 py4j.clientserver DEBUG Answer received: !yro16
+15:28:38,678 py4j.clientserver DEBUG Command to send: c
+o13
+sc
+e
+
+15:28:38,678 py4j.clientserver DEBUG Answer received: !yro17
+15:28:38,678 py4j.clientserver DEBUG Command to send: c
+o17
+register
+ro16
+e
+
+15:28:38,682 py4j.clientserver DEBUG Answer received: !yv
+15:28:38,682 py4j.clientserver DEBUG Command to send: r
+u
+PythonUtils
+rj
+e
+
+15:28:38,684 py4j.clientserver DEBUG Answer received: !ycorg.apache.spark.api.python.PythonUtils
+15:28:38,684 py4j.clientserver DEBUG Command to send: r
+m
+org.apache.spark.api.python.PythonUtils
+isEncryptionEnabled
+e
+
+15:28:38,685 py4j.clientserver DEBUG Answer received: !ym
+15:28:38,685 py4j.clientserver DEBUG Command to send: c
+z:org.apache.spark.api.python.PythonUtils
+isEncryptionEnabled
+ro13
+e
+
+15:28:38,687 py4j.clientserver DEBUG Answer received: !ybfalse
+15:28:38,687 py4j.clientserver DEBUG Command to send: r
+u
+PythonUtils
+rj
+e
+
+15:28:38,688 py4j.clientserver DEBUG Answer received: !ycorg.apache.spark.api.python.PythonUtils
+15:28:38,688 py4j.clientserver DEBUG Command to send: r
+m
+org.apache.spark.api.python.PythonUtils
+getPythonAuthSocketTimeout
+e
+
+15:28:38,689 py4j.clientserver DEBUG Answer received: !ym
+15:28:38,689 py4j.clientserver DEBUG Command to send: c
+z:org.apache.spark.api.python.PythonUtils
+getPythonAuthSocketTimeout
+ro13
+e
+
+15:28:38,689 py4j.clientserver DEBUG Answer received: !yL15
+15:28:38,689 py4j.clientserver DEBUG Command to send: r
+u
+PythonUtils
+rj
+e
+
+15:28:38,691 py4j.clientserver DEBUG Answer received: !ycorg.apache.spark.api.python.PythonUtils
+15:28:38,691 py4j.clientserver DEBUG Command to send: r
+m
+org.apache.spark.api.python.PythonUtils
+getSparkBufferSize
+e
+
+15:28:38,691 py4j.clientserver DEBUG Answer received: !ym
+15:28:38,691 py4j.clientserver DEBUG Command to send: c
+z:org.apache.spark.api.python.PythonUtils
+getSparkBufferSize
+ro13
+e
+
+15:28:38,691 py4j.clientserver DEBUG Answer received: !yi65536
+15:28:38,692 py4j.clientserver DEBUG Command to send: r
+u
+org
+rj
+e
+
+15:28:38,695 py4j.clientserver DEBUG Answer received: !yp
+15:28:38,696 py4j.clientserver DEBUG Command to send: r
+u
+org.apache
+rj
+e
+
+15:28:38,697 py4j.clientserver DEBUG Answer received: !yp
+15:28:38,697 py4j.clientserver DEBUG Command to send: r
+u
+org.apache.spark
+rj
+e
+
+15:28:38,698 py4j.clientserver DEBUG Answer received: !yp
+15:28:38,698 py4j.clientserver DEBUG Command to send: r
+u
+org.apache.spark.SparkFiles
+rj
+e
+
+15:28:38,698 py4j.clientserver DEBUG Answer received: !ycorg.apache.spark.SparkFiles
+15:28:38,698 py4j.clientserver DEBUG Command to send: r
+m
+org.apache.spark.SparkFiles
+getRootDirectory
+e
+
+15:28:38,699 py4j.clientserver DEBUG Answer received: !ym
+15:28:38,699 py4j.clientserver DEBUG Command to send: c
+z:org.apache.spark.SparkFiles
+getRootDirectory
+e
+
+15:28:38,700 py4j.clientserver DEBUG Answer received: !ysC:\\Users\\danie\\AppData\\Local\\Temp\\spark-90314a75-9378-46be-9e83-1df80b628b90\\userFiles-b76cd459-2cb9-46d3-80ce-55d59503054a
+15:28:38,700 py4j.clientserver DEBUG Command to send: c
+o15
+get
+sspark.submit.pyFiles
+s
+e
+
+15:28:38,700 py4j.clientserver DEBUG Answer received: !ys
+15:28:38,700 py4j.clientserver DEBUG Command to send: r
+u
+org
+rj
+e
+
+15:28:38,704 py4j.clientserver DEBUG Answer received: !yp
+15:28:38,704 py4j.clientserver DEBUG Command to send: r
+u
+org.apache
+rj
+e
+
+15:28:38,705 py4j.clientserver DEBUG Answer received: !yp
+15:28:38,705 py4j.clientserver DEBUG Command to send: r
+u
+org.apache.spark
+rj
+e
+
+15:28:38,705 py4j.clientserver DEBUG Answer received: !yp
+15:28:38,705 py4j.clientserver DEBUG Command to send: r
+u
+org.apache.spark.util
+rj
+e
+
+15:28:38,706 py4j.clientserver DEBUG Answer received: !yp
+15:28:38,706 py4j.clientserver DEBUG Command to send: r
+u
+org.apache.spark.util.Utils
+rj
+e
+
+15:28:38,708 py4j.clientserver DEBUG Answer received: !ycorg.apache.spark.util.Utils
+15:28:38,708 py4j.clientserver DEBUG Command to send: r
+m
+org.apache.spark.util.Utils
+getLocalDir
+e
+
+15:28:38,711 py4j.clientserver DEBUG Answer received: !ym
+15:28:38,711 py4j.clientserver DEBUG Command to send: c
+o13
+sc
+e
+
+15:28:38,711 py4j.clientserver DEBUG Answer received: !yro18
+15:28:38,712 py4j.clientserver DEBUG Command to send: c
+o18
+conf
+e
+
+15:28:38,712 py4j.clientserver DEBUG Answer received: !yro19
+15:28:38,712 py4j.clientserver DEBUG Command to send: c
+z:org.apache.spark.util.Utils
+getLocalDir
+ro19
+e
+
+15:28:38,712 py4j.clientserver DEBUG Answer received: !ysC:\\Users\\danie\\AppData\\Local\\Temp\\spark-90314a75-9378-46be-9e83-1df80b628b90
+15:28:38,712 py4j.clientserver DEBUG Command to send: r
+u
+org
+rj
+e
+
+15:28:38,716 py4j.clientserver DEBUG Answer received: !yp
+15:28:38,716 py4j.clientserver DEBUG Command to send: r
+u
+org.apache
+rj
+e
+
+15:28:38,724 py4j.clientserver DEBUG Answer received: !yp
+15:28:38,724 py4j.clientserver DEBUG Command to send: r
+u
+org.apache.spark
+rj
+e
+
+15:28:38,725 py4j.clientserver DEBUG Answer received: !yp
+15:28:38,725 py4j.clientserver DEBUG Command to send: r
+u
+org.apache.spark.util
+rj
+e
+
+15:28:38,725 py4j.clientserver DEBUG Answer received: !yp
+15:28:38,725 py4j.clientserver DEBUG Command to send: r
+u
+org.apache.spark.util.Utils
+rj
+e
+
+15:28:38,726 py4j.clientserver DEBUG Answer received: !ycorg.apache.spark.util.Utils
+15:28:38,726 py4j.clientserver DEBUG Command to send: r
+m
+org.apache.spark.util.Utils
+createTempDir
+e
+
+15:28:38,726 py4j.clientserver DEBUG Answer received: !ym
+15:28:38,727 py4j.clientserver DEBUG Command to send: c
+z:org.apache.spark.util.Utils
+createTempDir
+sC:\\Users\\danie\\AppData\\Local\\Temp\\spark-90314a75-9378-46be-9e83-1df80b628b90
+spyspark
+e
+
+15:28:38,728 py4j.clientserver DEBUG Answer received: !yro20
+15:28:38,728 py4j.clientserver DEBUG Command to send: c
+o20
+getAbsolutePath
+e
+
+15:28:38,729 py4j.clientserver DEBUG Answer received: !ysC:\\Users\\danie\\AppData\\Local\\Temp\\spark-90314a75-9378-46be-9e83-1df80b628b90\\pyspark-ec16f35e-24f6-461b-88aa-9cf8855ab291
+15:28:38,730 py4j.clientserver DEBUG Command to send: c
+o15
+get
+sspark.python.profile
+sfalse
+e
+
+15:28:38,730 py4j.clientserver DEBUG Answer received: !ysfalse
+15:28:38,730 py4j.clientserver DEBUG Command to send: r
+u
+SparkSession
+rj
+e
+
+15:28:38,764 py4j.clientserver DEBUG Answer received: !ycorg.apache.spark.sql.SparkSession
+15:28:38,764 py4j.clientserver DEBUG Command to send: r
+m
+org.apache.spark.sql.SparkSession
+getDefaultSession
+e
+
+15:28:38,796 py4j.clientserver DEBUG Answer received: !ym
+15:28:38,796 py4j.clientserver DEBUG Command to send: c
+z:org.apache.spark.sql.SparkSession
+getDefaultSession
+e
+
+15:28:38,798 py4j.clientserver DEBUG Answer received: !yro21
+15:28:38,798 py4j.clientserver DEBUG Command to send: c
+o21
+isDefined
+e
+
+15:28:38,799 py4j.clientserver DEBUG Answer received: !ybfalse
+15:28:38,799 py4j.clientserver DEBUG Command to send: r
+u
+SparkSession
+rj
+e
+
+15:28:38,801 py4j.clientserver DEBUG Answer received: !ycorg.apache.spark.sql.SparkSession
+15:28:38,801 py4j.clientserver DEBUG Command to send: c
+o13
+sc
+e
+
+15:28:38,801 py4j.clientserver DEBUG Answer received: !yro22
+15:28:38,801 py4j.clientserver DEBUG Command to send: i
+org.apache.spark.sql.SparkSession
+ro22
+e
+
+15:28:38,888 py4j.clientserver DEBUG Answer received: !yro23
+15:28:38,888 py4j.clientserver DEBUG Command to send: c
+o23
+sqlContext
+e
+
+15:28:38,889 py4j.clientserver DEBUG Answer received: !yro24
+15:28:38,889 py4j.clientserver DEBUG Command to send: r
+u
+SparkSession
+rj
+e
+
+15:28:38,892 py4j.clientserver DEBUG Answer received: !ycorg.apache.spark.sql.SparkSession
+15:28:38,892 py4j.clientserver DEBUG Command to send: r
+m
+org.apache.spark.sql.SparkSession
+setDefaultSession
+e
+
+15:28:38,892 py4j.clientserver DEBUG Answer received: !ym
+15:28:38,892 py4j.clientserver DEBUG Command to send: c
+z:org.apache.spark.sql.SparkSession
+setDefaultSession
+ro23
+e
+
+15:28:38,893 py4j.clientserver DEBUG Answer received: !yv
+15:28:38,893 py4j.clientserver DEBUG Command to send: r
+u
+SparkSession
+rj
+e
+
+15:28:38,895 py4j.clientserver DEBUG Answer received: !ycorg.apache.spark.sql.SparkSession
+15:28:38,895 py4j.clientserver DEBUG Command to send: r
+m
+org.apache.spark.sql.SparkSession
+setActiveSession
+e
+
+15:28:38,895 py4j.clientserver DEBUG Answer received: !ym
+15:28:38,895 py4j.clientserver DEBUG Command to send: c
+z:org.apache.spark.sql.SparkSession
+setActiveSession
+ro23
+e
+
+15:28:38,896 py4j.clientserver DEBUG Answer received: !yv
+15:28:38,896 py4j.clientserver DEBUG Command to send: c
+o23
+sessionState
+e
+
+15:28:39,198 py4j.clientserver DEBUG Command to send: m
+d
+o0
+e
+
+15:28:39,199 py4j.clientserver DEBUG Answer received: !yv
+15:28:39,199 py4j.clientserver DEBUG Command to send: m
+d
+o6
+e
+
+15:28:39,199 py4j.clientserver DEBUG Answer received: !yv
+15:28:39,199 py4j.clientserver DEBUG Command to send: m
+d
+o7
+e
+
+15:28:39,200 py4j.clientserver DEBUG Answer received: !yv
+15:28:39,200 py4j.clientserver DEBUG Command to send: m
+d
+o8
+e
+
+15:28:39,200 py4j.clientserver DEBUG Answer received: !yv
+15:28:39,200 py4j.clientserver DEBUG Command to send: m
+d
+o9
+e
+
+15:28:39,201 py4j.clientserver DEBUG Answer received: !yv
+15:28:39,201 py4j.clientserver DEBUG Command to send: m
+d
+o10
+e
+
+15:28:39,201 py4j.clientserver DEBUG Answer received: !yv
+15:28:39,201 py4j.clientserver DEBUG Command to send: m
+d
+o11
+e
+
+15:28:39,201 py4j.clientserver DEBUG Answer received: !yv
+15:28:39,202 py4j.clientserver DEBUG Command to send: m
+d
+o12
+e
+
+15:28:39,202 py4j.clientserver DEBUG Answer received: !yv
+15:28:39,202 py4j.clientserver DEBUG Command to send: m
+d
+o14
+e
+
+15:28:39,203 py4j.clientserver DEBUG Answer received: !yv
+15:28:40,52 py4j.clientserver DEBUG Answer received: !yro25
+15:28:40,52 py4j.clientserver DEBUG Command to send: c
+o25
+conf
+e
+
+15:28:40,53 py4j.clientserver DEBUG Answer received: !yro26
+15:28:40,53 py4j.clientserver DEBUG Command to send: c
+o26
+setConfString
+sspark.master
+slocal
+e
+
+15:28:40,55 py4j.clientserver DEBUG Answer received: !yv
+15:28:40,55 py4j.clientserver DEBUG Command to send: c
+o23
+sessionState
+e
+
+15:28:40,55 py4j.clientserver DEBUG Answer received: !yro27
+15:28:40,56 py4j.clientserver DEBUG Command to send: c
+o27
+conf
+e
+
+15:28:40,56 py4j.clientserver DEBUG Answer received: !yro28
+15:28:40,56 py4j.clientserver DEBUG Command to send: c
+o28
+setConfString
+sspark.app.name
+sapp
+e
+
+15:28:40,56 py4j.clientserver DEBUG Answer received: !yv
+15:28:40,57 py4j.clientserver DEBUG Command to send: c
+o13
+setLogLevel
+sWARN
+e
+
+15:28:40,58 py4j.clientserver DEBUG Answer received: !yv
+15:28:40,58 py4j.clientserver DEBUG Command to send: c
+o24
+read
+e
+
+15:28:40,67 py4j.clientserver DEBUG Answer received: !yro29
+15:28:40,67 py4j.clientserver DEBUG Command to send: r
+u
+PythonUtils
+rj
+e
+
+15:28:40,68 py4j.clientserver DEBUG Answer received: !ycorg.apache.spark.api.python.PythonUtils
+15:28:40,68 py4j.clientserver DEBUG Command to send: r
+m
+org.apache.spark.api.python.PythonUtils
+toSeq
+e
+
+15:28:40,69 py4j.clientserver DEBUG Answer received: !ym
+15:28:40,69 py4j.clientserver DEBUG Command to send: i
+java.util.ArrayList
+e
+
+15:28:40,69 py4j.clientserver DEBUG Answer received: !ylo30

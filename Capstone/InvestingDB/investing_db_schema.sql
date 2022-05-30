@@ -33,11 +33,25 @@ CREATE TABLE IF NOT EXISTS `investing`.`_stg_div_hist` (
   `attributes.record_date` TEXT NULL DEFAULT NULL,
   `attributes.date` TEXT NULL DEFAULT NULL,
   `attributes.adjusted_amount` DOUBLE NULL DEFAULT NULL,
-  `attributes.split_adj_factor` DOUBLE NULL DEFAULT NULL,
-  INDEX `ix__stg_div_hist_index` (`index` ASC) VISIBLE)
+  `attributes.split_adj_factor` DOUBLE NULL DEFAULT NULL)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
+
+CREATE INDEX `ix__stg_div_hist_index` ON `investing`.`_stg_div_hist` (`index` ASC) VISIBLE;
+
+
+-- -----------------------------------------------------
+-- Table `investing`.`_stg_has_div`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `investing`.`_stg_has_div` (
+  `Date` DATETIME NULL DEFAULT NULL,
+  `Dividends` DOUBLE NULL DEFAULT NULL)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+CREATE INDEX `ix__stg_has_div_Date` ON `investing`.`_stg_has_div` (`Date` ASC) VISIBLE;
 
 
 -- -----------------------------------------------------
@@ -50,12 +64,13 @@ CREATE TABLE IF NOT EXISTS `investing`.`_stg_price_hist` (
   `Low` DOUBLE NULL DEFAULT NULL,
   `Close` DOUBLE NULL DEFAULT NULL,
   `Volume` BIGINT NULL DEFAULT NULL,
-  `Dividends` DOUBLE NULL DEFAULT NULL,
-  `Stock Splits` DOUBLE NULL DEFAULT NULL,
-  INDEX `ix__stg_price_hist_Date` (`Date` ASC) VISIBLE)
+  `Dividends` BIGINT NULL DEFAULT NULL,
+  `Stock Splits` BIGINT NULL DEFAULT NULL)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
+
+CREATE INDEX `ix__stg_price_hist_Date` ON `investing`.`_stg_price_hist` (`Date` ASC) VISIBLE;
 
 
 -- -----------------------------------------------------
@@ -71,11 +86,12 @@ CREATE TABLE IF NOT EXISTS `investing`.`_stg_sp_current` (
   `Headquarters Location` TEXT NULL DEFAULT NULL,
   `Date first added` TEXT NULL DEFAULT NULL,
   `CIK` BIGINT NULL DEFAULT NULL,
-  `Founded` TEXT NULL DEFAULT NULL,
-  INDEX `ix__stg_sp_current_index` (`index` ASC) VISIBLE)
+  `Founded` TEXT NULL DEFAULT NULL)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
+
+CREATE INDEX `ix__stg_sp_current_index` ON `investing`.`_stg_sp_current` (`index` ASC) VISIBLE;
 
 
 -- -----------------------------------------------------
@@ -88,11 +104,12 @@ CREATE TABLE IF NOT EXISTS `investing`.`_stg_sp_history` (
   `('Added', 'Security')` TEXT NULL DEFAULT NULL,
   `('Removed', 'Ticker')` TEXT NULL DEFAULT NULL,
   `('Removed', 'Security')` TEXT NULL DEFAULT NULL,
-  `('Reason', 'Reason')` TEXT NULL DEFAULT NULL,
-  INDEX `ix__stg_sp_history_index` (`index` ASC) VISIBLE)
+  `('Reason', 'Reason')` TEXT NULL DEFAULT NULL)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
+
+CREATE INDEX `ix__stg_sp_history_index` ON `investing`.`_stg_sp_history` (`index` ASC) VISIBLE;
 
 
 -- -----------------------------------------------------
@@ -113,7 +130,7 @@ CREATE TABLE IF NOT EXISTS `investing`.`companies` (
   `UpdatedDate` DATETIME NULL DEFAULT NULL,
   PRIMARY KEY (`CompanyID`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 1031
+AUTO_INCREMENT = 1041
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -132,10 +149,7 @@ CREATE TABLE IF NOT EXISTS `investing`.`dividends` (
   `AdjAmount` FLOAT NULL DEFAULT NULL,
   `SplitAdjFactor` FLOAT NULL DEFAULT NULL,
   `UpdatedDate` DATETIME NULL DEFAULT NULL,
-  PRIMARY KEY (`CompanyID`, `ExDivDate`, `FreqType`),
-  CONSTRAINT `dividends_ibfk_1`
-    FOREIGN KEY (`CompanyID`)
-    REFERENCES `investing`.`companies` (`CompanyID`))
+  PRIMARY KEY (`CompanyID`, `ExDivDate`, `FreqType`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -153,15 +167,50 @@ CREATE TABLE IF NOT EXISTS `investing`.`prices` (
   `Close` FLOAT NULL DEFAULT NULL,
   `Volume` BIGINT NULL DEFAULT NULL,
   `UpdatedDate` DATETIME NULL DEFAULT NULL,
-  PRIMARY KEY (`CompanyID`, `Date`),
-  CONSTRAINT `prices_ibfk_1`
-    FOREIGN KEY (`CompanyID`)
-    REFERENCES `investing`.`companies` (`CompanyID`))
+  PRIMARY KEY (`CompanyID`, `Date`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
 USE `investing` ;
+
+-- -----------------------------------------------------
+-- procedure sp_get_dividends_and_prices_by_ticker
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `investing`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_dividends_and_prices_by_ticker`(
+	IN StockTicker CHAR(15)
+    )
+BEGIN
+	
+    DECLARE CompanyID_filter INT;
+    DECLARE SandPCompanyID INT;
+    SET CompanyID_filter = (SELECT CompanyID FROM Companies WHERE Ticker = StockTicker);
+    SET SandPCompanyID = (SELECT CompanyID FROM Companies WHERE Name = 'S&P 500 Index');
+    
+    SELECT
+		c.Ticker, 
+        d.FreqType,
+        d.ExDivDate, 
+        d.AdjAmount, 
+        p.Date AS PriceDate, 
+        DATEDIFF(p.Date, d.ExDivDate) as ExDivDays,
+        (p.Open + p.High + p.Low + p.Close) / 4.0 AS AvgPrice,
+        (sandp.Open + sandp.High + sandp.Low + sandp.Close) / 4.0 AS SandPAvgPrice
+    FROM companies c
+		LEFT OUTER JOIN dividends d ON c.CompanyID = d.CompanyId
+        LEFT OUTER JOIN prices p ON p.CompanyID = c.CompanyID
+			AND p.Date BETWEEN d.ExDivDate + interval -42 day AND d.ExDivDate + interval 42 day 
+		LEFT OUTER JOIN prices sandp ON sandp.CompanyID = SandPCompanyID
+			AND p.Date = sandp.Date
+	WHERE c.Ticker = StockTicker
+	ORDER BY d.ExDivDate, p.Date;
+    
+END$$
+
+DELIMITER ;
 
 -- -----------------------------------------------------
 -- procedure sp_refresh_companies
@@ -253,7 +302,7 @@ BEGIN
             AND d.FreqType = dh.`attributes.freq`
 	WHERE 
 		c.CompanyID = CompanyID_filter
-		AND dh.`attributes.ex_date` IS NOT NULL
+        AND dh.`attributes.ex_date` IS NOT NULL
         AND d.ExDivDate IS NULL;
         
     UPDATE dividends d

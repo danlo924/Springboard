@@ -29,10 +29,10 @@ def run_full_pipline():
         b. iterate the list of Tickers and
             i. get dividend history to a staging table
             ii. call sp_refresh_dividends to refresh the dividends table
-    4. analyze prices and get trading returns
-        a. analyze price changes N number of days before and after each ex-dividend date 
-        b. normalize returns against the S&P averages during the same period
-        c. group and summarize average returns for each Ticker + each possible trading window surrounding ex-dividend dates
+    4. get relevant dividends and price history to parquet files, partitioned by Ticker
+        a. for each Ticker, find all ex-dividend dates for the dividends
+        b. get full price history of the Ticker and the S&P average for 30 days before and 30 days after each of the ex-dividend dates
+        c. output the final results to the "output\divs_and_prices" folder for analysis by the run_analyzer.py script
     '''
 
     # instantiate pipeline object with db url, wikipedia url, seeking alpha url, and api key.
@@ -51,20 +51,13 @@ def run_full_pipline():
     pipeline1.get_sandp_companies_list()
 
     # refresh price history data
-    pipeline1.refresh_prices(max_tickers=1, lookback_window=0)
+    pipeline1.refresh_prices(max_tickers=1000, lookback_window=0)
 
     # refresh dividend history
-    pipeline1.refresh_dividends(max_tickers=1, lookback_window=0)
+    pipeline1.refresh_dividends(max_tickers=1000, lookback_window=0)
 
     # output dividends and prices surrounding ex-dividend dates
     pipeline1.get_divs_and_prices_to_parquet()    
-
-    #### ANALYTICAL ETL:
-    #     if price history exists days_before and days_after and S&P hitory exists then
-    #       evaluate buying 30-1 days before and selling 0-30 days after and get optimal buy / sell CAGR vs S&P
-    #     else pass and give reason for passing this ex-div date
-    #     aggregate all dividend dates for each ticker to get an average best buy / sell dates per ticker
-    #     output files to parquet files  
 
     # close db connection at end of run
     pipeline1.close_db_conn()

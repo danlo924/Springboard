@@ -153,7 +153,7 @@ class Pipeline:
 
     def get_divs_and_prices_to_parquet(self):            
         '''
-        for each Ticker, for each combination of days up to 30 days before and after the ex-dividend date,
+        for each Ticker, for each combination of days up to 42 days (6 weeks) before and after the ex-dividend date,
         ''' 
         try:
             #### CREATE SPARK SESSION ####       
@@ -179,7 +179,7 @@ class Pipeline:
                 div_prices = self.call_proc('sp_get_dividends_and_prices_by_ticker', args=[ticker,])
                 div_prices_rdd = spark.sparkContext.parallelize(div_prices)
                 div_prices_df = spark.createDataFrame(div_prices_rdd,output_schema)
-                div_prices_df.write.partitionBy("Ticker").parquet("output".format("Ticker"), mode="append")
+                div_prices_df.write.partitionBy("Ticker").parquet("output\divs_and_prices".format("Ticker"), mode="append")
                 cnt += 1     
             l.log_message('Dividend Analysis completed successfully', show=True)
         except Exception as error:
