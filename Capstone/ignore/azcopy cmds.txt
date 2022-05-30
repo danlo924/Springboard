@@ -1,3 +1,0 @@
-azcopy login --tenant-id 24d4d128-6f68-420a-9201-1f8bee405db6
-
-azcopy copy "C:\GitRepos\Springboard\Capstone\output\divs_and_prices" "https://azblobstoragedwilde.blob.core.windows.net/mycontainer" --recursive=true
