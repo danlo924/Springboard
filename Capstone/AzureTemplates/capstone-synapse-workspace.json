@@ -1,0 +1,200 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vulnerabilityAssessments_Default_storageContainerPath": {
+            "type": "SecureString"
+        },
+        "workspaces_capstone_synapse_workspace_name": {
+            "defaultValue": "capstone-synapse-workspace",
+            "type": "String"
+        },
+        "storageAccounts_dwildedatalake_externalid": {
+            "defaultValue": "/subscriptions/f889bba1-d025-4410-9967-d7434e8b8e62/resourceGroups/SpringboardCapstone/providers/Microsoft.Storage/storageAccounts/dwildedatalake",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Synapse/workspaces",
+            "apiVersion": "2021-06-01",
+            "name": "[parameters('workspaces_capstone_synapse_workspace_name')]",
+            "location": "westus2",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "defaultDataLakeStorage": {
+                    "resourceId": "[parameters('storageAccounts_dwildedatalake_externalid')]",
+                    "createManagedPrivateEndpoint": false,
+                    "accountUrl": "https://dwildedatalake.dfs.core.windows.net",
+                    "filesystem": "dwildefilesystem"
+                },
+                "encryption": {},
+                "connectivityEndpoints": {
+                    "web": "[concat('https://web.azuresynapse.net?workspace=%2fsubscriptions%2ff889bba1-d025-4410-9967-d7434e8b8e62%2fresourceGroups%2fSpringboardCapstone%2fproviders%2fMicrosoft.Synapse%2fworkspaces%2f', parameters('workspaces_capstone_synapse_workspace_name'))]",
+                    "dev": "[concat('https://', parameters('workspaces_capstone_synapse_workspace_name'), '.dev.azuresynapse.net')]",
+                    "sqlOnDemand": "[concat(parameters('workspaces_capstone_synapse_workspace_name'), '-ondemand.sql.azuresynapse.net')]",
+                    "sql": "[concat(parameters('workspaces_capstone_synapse_workspace_name'), '.sql.azuresynapse.net')]"
+                },
+                "managedResourceGroupName": "synapseworkspace-managedrg-eaba25d8-3c1f-48cb-bbec-2794db884caa",
+                "sqlAdministratorLogin": "sqladminuser",
+                "privateEndpointConnections": [],
+                "publicNetworkAccess": "Enabled",
+                "cspWorkspaceAdminProperties": {
+                    "initialWorkspaceAdminObjectId": "6731a960-271b-4ae3-a534-b5c92ea4888e"
+                },
+                "trustedServiceBypassEnabled": false
+            }
+        },
+        {
+            "type": "Microsoft.Synapse/workspaces/auditingSettings",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('workspaces_capstone_synapse_workspace_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Synapse/workspaces', parameters('workspaces_capstone_synapse_workspace_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "auditActionsAndGroups": [],
+                "isStorageSecondaryKeyInUse": false,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Synapse/workspaces/azureADOnlyAuthentications",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('workspaces_capstone_synapse_workspace_name'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Synapse/workspaces', parameters('workspaces_capstone_synapse_workspace_name'))]"
+            ],
+            "properties": {
+                "azureADOnlyAuthentication": false
+            }
+        },
+        {
+            "type": "Microsoft.Synapse/workspaces/bigDataPools",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('workspaces_capstone_synapse_workspace_name'), '/dwildesparkpool')]",
+            "location": "westus2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Synapse/workspaces', parameters('workspaces_capstone_synapse_workspace_name'))]"
+            ],
+            "properties": {
+                "sparkVersion": "3.1",
+                "nodeCount": 10,
+                "nodeSize": "Small",
+                "nodeSizeFamily": "MemoryOptimized",
+                "autoScale": {
+                    "enabled": true,
+                    "minNodeCount": 3,
+                    "maxNodeCount": 3
+                },
+                "autoPause": {
+                    "enabled": true,
+                    "delayInMinutes": 15
+                },
+                "isComputeIsolationEnabled": false,
+                "sessionLevelPackagesEnabled": false,
+                "cacheSize": 0,
+                "dynamicExecutorAllocation": {
+                    "enabled": false
+                },
+                "provisioningState": "Succeeded"
+            }
+        },
+        {
+            "type": "Microsoft.Synapse/workspaces/dedicatedSQLminimalTlsSettings",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('workspaces_capstone_synapse_workspace_name'), '/default')]",
+            "location": "westus2",
+            "dependsOn": [
+                "[resourceId('Microsoft.Synapse/workspaces', parameters('workspaces_capstone_synapse_workspace_name'))]"
+            ],
+            "properties": {
+                "minimalTlsVersion": "1.2"
+            }
+        },
+        {
+            "type": "Microsoft.Synapse/workspaces/extendedAuditingSettings",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('workspaces_capstone_synapse_workspace_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Synapse/workspaces', parameters('workspaces_capstone_synapse_workspace_name'))]"
+            ],
+            "properties": {
+                "retentionDays": 0,
+                "auditActionsAndGroups": [],
+                "isStorageSecondaryKeyInUse": false,
+                "isAzureMonitorTargetEnabled": false,
+                "state": "Disabled",
+                "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
+            }
+        },
+        {
+            "type": "Microsoft.Synapse/workspaces/firewallRules",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('workspaces_capstone_synapse_workspace_name'), '/allowAll')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Synapse/workspaces', parameters('workspaces_capstone_synapse_workspace_name'))]"
+            ],
+            "properties": {
+                "startIpAddress": "0.0.0.0",
+                "endIpAddress": "255.255.255.255"
+            }
+        },
+        {
+            "type": "Microsoft.Synapse/workspaces/integrationruntimes",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('workspaces_capstone_synapse_workspace_name'), '/AutoResolveIntegrationRuntime')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Synapse/workspaces', parameters('workspaces_capstone_synapse_workspace_name'))]"
+            ],
+            "properties": {
+                "type": "Managed",
+                "typeProperties": {
+                    "computeProperties": {
+                        "location": "AutoResolve"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Synapse/workspaces/securityAlertPolicies",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('workspaces_capstone_synapse_workspace_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Synapse/workspaces', parameters('workspaces_capstone_synapse_workspace_name'))]"
+            ],
+            "properties": {
+                "state": "Disabled",
+                "disabledAlerts": [
+                    ""
+                ],
+                "emailAddresses": [
+                    ""
+                ],
+                "emailAccountAdmins": false,
+                "retentionDays": 0
+            }
+        },
+        {
+            "type": "Microsoft.Synapse/workspaces/vulnerabilityAssessments",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('workspaces_capstone_synapse_workspace_name'), '/Default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Synapse/workspaces', parameters('workspaces_capstone_synapse_workspace_name'))]"
+            ],
+            "properties": {
+                "recurringScans": {
+                    "isEnabled": false,
+                    "emailSubscriptionAdmins": true
+                },
+                "storageContainerPath": "[parameters('vulnerabilityAssessments_Default_storageContainerPath')]"
+            }
+        }
+    ]
+}
